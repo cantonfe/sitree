@@ -1,0 +1,18 @@
+Package: sitree
+Version: 0.1-0
+Date: 2017-01-09
+Title: Single Tree Simulator
+Authors@R: c(person("Clara", "Anton Fernandez", role = c("aut", "cre"),
+		     email = "caf@nibio.no"),
+	      person("Nikolas", "von Lupke", role = "ctb"))
+Author: Clara Anton Fernandez [aut, cre],
+  Nikolas von Lupke [ctb]
+Maintainer: Clara Anton Fernandez <caf@nibio.no>
+Depends: R (>= 3.1.0), data.table, methods
+Suggests: knitr, lattice
+VignetteBuilder: knitr
+Description: Forecasts plots at tree level.
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyLoad: yes
+LazyData: yes
