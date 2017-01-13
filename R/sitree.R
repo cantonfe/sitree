@@ -381,8 +381,7 @@ sitree <- function(tree.df,
                                     )
                                     )
   
-  common.vars <- prep.common.vars$res
-  fl <- prep.common.vars$fl
+   fl <- prep.common.vars$fl
 
  
   
@@ -398,4 +397,4 @@ sitree <- function(tree.df,
             )
   
 }
-## reassignInPackage("sitree", "sitree", sitree)
+
