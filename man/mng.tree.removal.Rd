@@ -72,7 +72,7 @@ common.vars <-  prep.common.vars.fun(
 )
 
 fl$management <- data.frame(matrix(NA, ncol = tr.i$nperiods,
-                                   nrow = nrow(tr.i$data$dbh.mm)))
+                                   nrow = length(fl$ustandID)))
 names(fl$management) <- paste0("t", 1:tr.i$nperiods)
 
 management <- management.prob(tr.i,
