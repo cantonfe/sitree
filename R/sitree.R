@@ -14,7 +14,7 @@ sitree <- function(tree.df,
   if (!is.list(functions)) stop ('functions should be a list')
   if (!is.data.frame(tree.df)) stop ('tree.df should be a data.frame')
   if ( !(is.data.frame(stand.df) | is.list(stand.df) ) ) {
-    stop ('stand.df should be a data.frame')
+    stop ('stand.df should be a data.frame or a list')
   }
   ## check that all functions are defined
   if (!all(c('fn.growth', 'fn.mort', 'fn.recr', 'fn.management', 'fn.modif') %in%
@@ -68,8 +68,11 @@ sitree <- function(tree.df,
   rm(trl, tr.rest)
 
 ### stand data, a data.frame or list
-  fl <- as.list(stand.df)
-  
+    fl <- as.list(stand.df)
+    ## create the management data frame
+    fl$management <- data.frame(matrix(NA, ncol = n.periods,
+                                       nrow = length(fl$ustandID)))
+    names(fl$management) <- paste0("t", 1:n.periods)
 
 ######################################
   ## VARS REQUIRED
@@ -378,8 +381,7 @@ sitree <- function(tree.df,
                                     )
                                     )
   
-  common.vars <- prep.common.vars$res
-  fl <- prep.common.vars$fl
+   fl <- prep.common.vars$fl
 
  
   
@@ -395,4 +397,4 @@ sitree <- function(tree.df,
             )
   
 }
-## reassignInPackage("sitree", "sitree", sitree)
+

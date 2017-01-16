@@ -71,6 +71,10 @@ common.vars <-  prep.common.vars.fun(
   treslag.lauv = c(30, 31)
 )
 
+fl$management <- data.frame(matrix(NA, ncol = tr.i$nperiods,
+                                   nrow = length(fl$ustandID)))
+names(fl$management) <- paste0("t", 1:tr.i$nperiods)
+
 management <- management.prob(tr.i,
                 fl,
                 fun.final.felling = "harv.prob",

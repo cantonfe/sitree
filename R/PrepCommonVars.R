@@ -23,8 +23,7 @@ prep.common.vars.fun <- function(tr,
 ########################
   res$i.stand <- match(tr$data[["ustandID"]], fl[[ "ustandID"]])
   ## an object where we store plot (not subplot) ID
-  res$uplotID.tr <- substr(fl$ustandID, 1,
-                           nchar(as.character(fl$ustandID))-2)[res$i.stand]
+ 
   ## NA mean no trees in that plot
   res$i.tree <- match(fl$ustandID, tr$data$ustandID)
   res$tree.BA.m2 <- pi * (tr$data[["dbh.mm"]][, this.period]/1000/2)^2
@@ -67,7 +66,7 @@ prep.common.vars.fun <- function(tr,
   }
   ## SPP COMPOSITION
   ## With spp composition we are trying to describe the type of competition that the
-  ## tree is enduring we calculate this at plot level and not subplot
+  ## tree is enduring we calculate this at plot level
   if (any(vars.required %in% c("pr.pine.ba", "pr.spru.ba", "pr.harw.ha"))){
     ## by ba 
     pr.spp.ba <- data.frame(spru = rep(0, length(res$i.stand)),
@@ -82,11 +81,11 @@ prep.common.vars.fun <- function(tr,
     pr.spp.ba$harw[res$spp %in% c("birch", "other")] <- 1
     pr.spp.ba <- pr.spp.ba * res$tree.BA.m2
     
-    dum.s <- tapply(pr.spp.ba$spru, res$uplotID.tr, sum)
-    dum.p <- tapply(pr.spp.ba$pine, res$uplotID.tr, sum)
-    dum.h <- tapply(pr.spp.ba$harw, res$uplotID.tr, sum)
-    dum.b <- tapply(pr.spp.ba$birch, res$uplotID.tr, sum)
-    dum.o <- tapply(pr.spp.ba$other, res$uplotID.tr, sum)
+    dum.s <- tapply(pr.spp.ba$spru, tr$data$ustandID, sum)
+    dum.p <- tapply(pr.spp.ba$pine, tr$data$ustandID, sum)
+    dum.h <- tapply(pr.spp.ba$harw, tr$data$ustandID, sum)
+    dum.b <- tapply(pr.spp.ba$birch, tr$data$ustandID, sum)
+    dum.o <- tapply(pr.spp.ba$other, tr$data$ustandID, sum)
     pr.spp.ba <- data.frame(spru = as.vector(dum.s),
                             pine = as.vector(dum.p),
                             harw = as.vector(dum.h),
@@ -94,7 +93,7 @@ prep.common.vars.fun <- function(tr,
                             other = as.vector(dum.o)
                             )
     pr.spp.ba <- pr.spp.ba / with(pr.spp.ba, spru + pine + harw)
-    pr.spp.ba <- pr.spp.ba[ match(res$uplotID.tr, names(dum.s)),]*100 ## in %
+    pr.spp.ba <- pr.spp.ba[ match(tr$data$ustandID, names(dum.s)),]*100 ## in %
     res$pr.spp.ba <- pr.spp.ba; rm(pr.spp.ba)
   }
   
@@ -106,7 +105,7 @@ prep.common.vars.fun <- function(tr,
   if (any(vars.required %in% c("PBAL.m2.ha"))){
     ## 10000 / fl[["plot.size.m2"]][res$i.stand] to convert per tree to ha
     res$PBAL.m2.ha <- ave(res$tree.BA.m2 * 10000 / fl[["plot.size.m2"]][res$i.stand], ##fl[["tree2ha"]][res$i.stand],
-                          res$uplotID.tr,
+                          tr$ustandID,
                           FUN = function(X){
                             ord.x <- order(X)
                             X <- sum(X[ord.x]) - cumsum(X[ord.x])

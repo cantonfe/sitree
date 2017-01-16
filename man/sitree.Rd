@@ -24,6 +24,8 @@ dimension), height (a measure of vertical dimension), tree.sp (tree species)
   \item{stand.df}{
 A data frame or list with neccessary data on the stand (e.g. slope, site
 index). It should include a 'ustanID' that matches the one in tree.df
+and a 'plot.size.m2', the plot size in m2. 'plot.size.m2' is only used
+in the summary.sitree function to calculate figures by ha.
 }
   \item{functions}{
 A list describing the basic functions. It should include a minimum of a

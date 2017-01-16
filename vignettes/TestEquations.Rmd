@@ -93,6 +93,7 @@ la(2)
 square$sides
 ```
 Let\'s see now some examples of the methods implemented for these RF.
+
 ```{r}	
 
  require(sitree)
