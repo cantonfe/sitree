@@ -71,7 +71,7 @@ sitree <- function(tree.df,
     fl <- as.list(stand.df)
     ## create the management data frame
     fl$management <- data.frame(matrix(NA, ncol = n.periods,
-                                       nrow = nrow(tr$data$dbh.mm)))
+                                       nrow = length(fl$ustandID)))
     names(fl$management) <- paste0("t", 1:n.periods)
 
 ######################################

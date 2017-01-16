@@ -96,8 +96,9 @@ management.prob <- function(
     thinning <- ifelse( runif(length(thin),0,1) <= thin,  TRUE, FALSE)
     vol <- sum(thinning * fl$ha2total * common.vars$vuprha.m3.ha)
   }
-  
+
   mng <- fl$management[, next.period]
+  mng[is.na(mng)] <- "00000"
   substring(mng[final.felling], 1) <- '1'
   substring(mng[thinning]     , 2) <- '1'
 
@@ -108,3 +109,4 @@ management.prob <- function(
 } 
 
 ## reassignInPackage("management.prob", "sitree", management.prob)
+##reassignInPackage("sitree", "sitree", sitree)

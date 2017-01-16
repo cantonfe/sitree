@@ -112,6 +112,9 @@ common.vars <-  prep.common.vars.fun(
   treslag.furu = c(10, 11, 20, 21, 29),
   treslag.lauv = c(30, 31)
 )
+fl$management <- data.frame(matrix(NA, ncol = tr.i$nperiods,
+                                   nrow = nrow(tr.i$data$dbh.mm)))
+names(fl$management) <- paste0("t", 1:tr.i$nperiods)
 
 management.prob(tr.i,
                 fl,
@@ -137,5 +140,6 @@ thin.prob(region = fl$region[1:3],
           SI.m = fl$SI.m[1:3],
           SI.spp = fl$SI.spp[1:3]
 )
+
 }
 
