@@ -8,8 +8,8 @@ Authors@R: c(person("Clara", "Anton Fernandez", role = c("aut", "cre"),
 Author: Clara Anton Fernandez [aut, cre],
   Nikolas von Lupke [ctb]
 Maintainer: Clara Anton Fernandez <caf@nibio.no>
-Depends: R (>= 3.1.0), data.table, methods
-Suggests: knitr, lattice
+Depends: R (>= 3.1.0), data.table, methods, lattice, latticeExtra
+Suggests: knitr
 VignetteBuilder: knitr
 Description: Forecasts plots at tree level.
 License: GPL (>= 2)

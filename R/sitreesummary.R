@@ -1,5 +1,6 @@
 
-summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
+sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
+                           plot.all.together = FALSE){
 
   nplots <- length(sitrees.res$fl$ustandID)
   res <- list()
@@ -12,8 +13,10 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
   res$SBA.m2.ha <- res$stems.ha <- res$heights.10 <-
     data.frame(t0 = matrix(NA, nrow = nplots))
   ## initialize my.plots
-  my.plots <- list()
+  my.plots <- list(plot1 = NULL, plot2 = NULL, plot3 = NULL, plot4 = NULL,
+                   plot5 = NULL)
   
+
   for (i in 0:sitrees.res$live$nperiods){
     this.period <- paste0("t", i)
     res$tree.BA.m2 <- pi * (sitrees.res$live$data$dbh.mm[, this.period]/1000/2)^2
@@ -73,7 +76,7 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
                           period = dead.trees$period),
                 FUN = length)
     num.dead.trees.ha$x <- num.dead.trees.ha$x *
-      res$tree2ha[match(num.dead.trees.ha$ustandID, fl$ustandID)]
+      res$tree2ha[match(num.dead.trees.ha$ustandID, sitrees.res$fl$ustandID)]
   }
   
   if (5 %in% plots){
@@ -88,7 +91,7 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
                           period = removed.trees$period),
                 FUN = length)
     num.removed.trees.ha$x <- num.removed.trees.ha$x *
-      res$tree2ha[match(num.removed.trees.ha$ustandID, fl$ustandID)]
+      res$tree2ha[match(num.removed.trees.ha$ustandID, sitrees.res$fl$ustandID)]
   }
   
   
@@ -98,11 +101,14 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
                        varying = names(res$SBA.m2.ha), 
                        timevar = "period",
                        direction = "long", sep = "")
+  SBA.m2.ha$period <- factor(paste0("t", SBA.m2.ha$period))
   if (by.stand){
     my.plots$plot1 <- xyplot(t ~ period, groups = SBA.m2.ha$id,
                              data = SBA.m2.ha, ylab = "SBA.m2.ha", type = "l")
   } else{
-    SBA.m2.ha$plot.size.m2 <- fl$plot.size.m2[match(SBA.m2.ha$id, fl$ustandID)]
+    SBA.m2.ha$plot.size.m2 <-
+      sitrees.res$fl$plot.size.m2[match(SBA.m2.ha$id,
+                                        sitrees.res$fl$ustandID)]
     SBA.m2.ha$SBA.m2 <- with(SBA.m2.ha, t / 10000 * plot.size.m2)
     SBA.m2.ha <- aggregate( SBA.m2 ~ period, data = SBA.m2.ha, FUN = sum)
     my.plots$plot1 <- xyplot(SBA.m2 ~ period, 
@@ -115,11 +121,14 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
                        varying = names(res$stems.ha), 
                        timevar = "period",
                       direction = "long", sep = "")
+  stems.ha$period <- factor(paste0("t", stems.ha$period))
   if (by.stand){
     my.plots$plot2 <- xyplot(t ~ period, groups = stems.ha$id,
                              data = stems.ha, ylab = "stems/ha", type = "l")
   } else {
-    stems.ha$plot.size.m2 <- fl$plot.size.m2[match(stems.ha$id, fl$ustandID)]
+    stems.ha$plot.size.m2 <-
+      sitrees.res$fl$plot.size.m2[match(stems.ha$id,
+                                        sitrees.res$fl$ustandID)]
     stems.ha$stems <- with(stems.ha, t / 10000 * plot.size.m2)
     stems.ha <- aggregate( stems ~ period, data = stems.ha, FUN = sum)
     my.plots$plot2 <- xyplot(stems ~ period, groups = stems.ha$id,
@@ -131,6 +140,7 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
                        varying = names(res$heights.10), 
                        timevar = "period",
                        direction = "long", sep = "")
+  heights.10$period <- factor(paste0("t", heights.10$period))
   
   my.plots$plot3 <- xyplot(t ~ period, groups = heights.10$id, data = heights.10,
                            type = 'l',
@@ -143,7 +153,8 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
            data = num.dead.trees.ha, main = "dead trees per ha", type = "l")
   } else {
     num.dead.trees.ha$plot.size.m2 <-
-      fl$plot.size.m2[match(num.dead.trees.ha$ustandID, fl$ustandID)]
+      sitrees.res$fl$plot.size.m2[match(num.dead.trees.ha$ustandID,
+                                        sitrees.res$fl$ustandID)]
     num.dead.trees.ha$stems <- with(num.dead.trees.ha, x / 10000 * plot.size.m2)
     num.dead.trees.ha <- aggregate( stems ~ period,
                                    data = num.dead.trees.ha, FUN = sum)
@@ -159,7 +170,8 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
            ylab = "number of trees removed")
   } else {
     num.removed.trees.ha$plot.size.m2 <-
-      fl$plot.size.m2[match(num.removed.trees.ha$ustandID, fl$ustandID)]
+      sitrees.res$fl$plot.size.m2[match(num.removed.trees.ha$ustandID,
+                                        sitrees.res$fl$ustandID)]
     num.removed.trees.ha$stems <-
       with(num.removed.trees.ha, x / 10000 * plot.size.m2)
     num.removed.trees.ha <- aggregate( stems ~ period,
@@ -169,12 +181,62 @@ summary.sitree <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE){
            main = "removed trees", type = "b",
            ylab = "number of trees removed")
   }
+
+
+  
   if (plot) {
-    for (i in 1:length(my.plots)){
-      print(my.plots[[i]])
-      cat ("Press [enter] to continue")
-      line <- readline()
+    if (plot.all.together & length(my.plots) > 1){
+
+     
+      if (by.stand){
+         xx <- list(SBA.m2.ha = SBA.m2.ha[,c("period", "t", "id")],
+                   stems.ha = stems.ha[,c("period", "t", "id")],
+                   heights.10 = heights.10[,c("period", "t", "id")],
+                   num.dead.trees.ha =
+                     num.dead.trees.ha[,c("period", "x", "ustandID")],
+                   num.removed.trees.ha =
+                     num.removed.trees.ha[,c("period", "x", "ustandID")]
+                   )
+        xx[!1:5 %in% plots] <- NULL
+        
+        xx <- lapply(xx, FUN = function(x) {
+          names(x) <- c("period", "t", "id")
+          return(x)
+        })
+        xx <- rbindlist(xx, idcol = 'id.plot')
+        
+        print(xyplot(t ~ period|id.plot, data = xx, type = "b", groups = xx$id,
+               scales = list (y = list(relation = "free"))))
+        
+      } else {
+        xx <- list(SBA.m2 = SBA.m2.ha[,c("period", "SBA.m2")],
+                   stems = stems.ha[,c("period", "stems")],
+                   heights.10.tallest = heights.10[,c("period", "t", "id")],
+                   num.dead.trees =
+                     num.dead.trees.ha[,c("period", "stems")],
+                   num.removed.trees =
+                     num.removed.trees.ha[,c("period", "stems")]
+                   )
+        xx[!1:5 %in% plots] <- NULL
+        
+        xx <- lapply(xx, FUN = function(x) {
+          if (ncol(x) == 2) x$id <- 1
+          names(x) <- c("period", "t", "id")
+          return(x)
+        })
+        xx <- rbindlist(xx, idcol = 'id.plot')
+        print(xyplot(t ~ period|id.plot, data = xx, type = "b", groups = xx$id,
+               scales = list (y = list(relation = "free")), ylab = ""))
+        
+      }## end if by.stand
+      
+    } else { ## if plot.all.together
+      for (i in 1:length(my.plots)){
+        print(my.plots[[i]])
+        cat ("Press [enter] to continue")
+        line <- readline()
       }
-  }
+    } ## end else (if plot.all.together)
+  }## end if plot
   invisible(my.plots)
 }

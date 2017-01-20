@@ -1,5 +1,5 @@
-\name{summary.sitree}
-\alias{summary.sitree}
+\name{sitree.summary}
+\alias{sitree.summary}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Summary plots
@@ -9,7 +9,8 @@ Summary plots
   height of tallest 10 trees, number of dead trees, and number of harvested trees)
 }
 \usage{
-summary.sitree(sitrees.res, plots, by.stand = TRUE, plot = FALSE)
+sitree.summary(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
+                           plot.all.together = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,6 +29,10 @@ by 10.000 to obtain total values)
 }
   \item{plot}{
 TRUE/FALSE if plots are printed
+}
+
+  \item{plot.all.together}{
+if TRUE all plots are plotted in a single page
 }
 }
 
@@ -74,7 +79,7 @@ res <- sitree (tree.df   = tr,
                per.vol.harv = 0.83
                )
 
-summary.plots <- summary.sitree(res, plots = 1:6, by.stand = FALSE, plot = TRUE)
+summary.plots <- sitree.summary(res, plots = 1:6, by.stand = FALSE, plot = TRUE)
 
 
 

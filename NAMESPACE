@@ -1,2 +1,2 @@
 exportPattern("^[[:alpha:]]+")
-import(data.table, methods, stats)
+import(data.table, methods, stats, lattice, latticeExtra)
