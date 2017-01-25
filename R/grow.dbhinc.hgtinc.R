@@ -32,6 +32,7 @@ function (tr,
                                          this.period = this.period,
                                          tr = tr,
                                          fl = fl,
+                                         dbh.inc.mm,
                                          ...))
     } else {
       hgt.inc.dm <- rep(0, length(dbh.inc.mm))

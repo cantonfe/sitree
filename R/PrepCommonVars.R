@@ -103,9 +103,10 @@ prep.common.vars.fun <- function(tr,
   ## or we would be overestimating competition.
   
   if (any(vars.required %in% c("PBAL.m2.ha"))){
+    
     ## 10000 / fl[["plot.size.m2"]][res$i.stand] to convert per tree to ha
     res$PBAL.m2.ha <- ave(res$tree.BA.m2 * 10000 / fl[["plot.size.m2"]][res$i.stand], ##fl[["tree2ha"]][res$i.stand],
-                          tr$ustandID,
+                          tr$data$ustandID,
                           FUN = function(X){
                             ord.x <- order(X)
                             X <- sum(X[ord.x]) - cumsum(X[ord.x])

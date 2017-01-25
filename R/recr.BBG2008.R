@@ -65,17 +65,22 @@ function (tr,
 
     uid <-  rep.int(recr.ha[, "ustandID"], length(all.spp))
     reps <- recr.ha[, paste(all.spp, ".e", sep = "")]
-    reps <- unlist(reps)
-    
-            
-    list(ustandID = if (noingrowth) 0 else rep.int(uid, reps),
-         treeid    = max(tr$data[["treeid"]]) + 
-             (1:sum(recr.ha[, paste(all.spp, ".e", sep = "")])),
+  reps <- unlist(reps)
+  
+  if (noingrowth) treeid <- NULL else treeid <- max(tr$data[["treeid"]]) + 
+             (1:sum(recr.ha[, paste(all.spp, ".e", sep = "")]))
+
+  
+
+  return(
+    list(ustandID = if (noingrowth) NULL else rep.int(uid, reps),
+         treeid    = treeid,
          dbh.mm    = foo2(rep(50, sum(n.newtrees)), next.period),
          height.dm = foo2(rep(120, sum(n.newtrees)), next.period),
          yrs.sim   = rep(2.5, sum(n.newtrees)), 
-         tree.sp   = if (noingrowth) 0 else rep.int(c(1,10,30, 40), 
+         tree.sp   = if (noingrowth) NULL else rep.int(c(1,10,30, 40), 
                                                     n.newtrees)
          )
+  )
 }
 

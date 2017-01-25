@@ -23,7 +23,7 @@ dimension), height (a measure of vertical dimension), tree.sp (tree species)
 }
   \item{stand.df}{
 A data frame or list with neccessary data on the stand (e.g. slope, site
-index). It should include a 'ustanID' that matches the one in tree.df
+index). It should include a 'ustandID' that matches the one in tree.df
 and a 'plot.size.m2', the plot size in m2. 'plot.size.m2' is only used
 in the summary.sitree function to calculate figures by ha.
 }
@@ -91,5 +91,30 @@ result.sitree <- sitree (tree.df   = tr,
                            per.vol.harv = 0.83
                            )
 str(result.sitree)
+set.seed(2017)
+result.sitree <- sitree (tree.df   = stand.west.tr,
+                           stand.df  = stand.west.st,
+                           functions = list(
+                             fn.growth     = 'grow.dbhinc.hgtinc',
+                             fn.dbh.inc = "dbhi.BN2009",
+                             fn.hgt.inc =  "height.korf", 
+                             fn.mort       = 'mort.B2007',
+                             fn.recr       = 'recr.BBG2008',
+                             fn.management = NULL,
+                             fn.tree.removal = NULL,
+                             fn.modif      = NULL, 
+                             fn.prep.common.vars = 'prep.common.vars.fun'
+                           ),
+                           n.periods = 20,
+                           period.length = 5,
+                           mng.options = NA,
+                           print.comments = FALSE,
+                           treslag.gran = c(1, 2, 3),
+                           treslag.furu = c(10, 11, 20, 21, 29),
+                           treslag.lauv = c(30, 31),
+                           'BN2009',
+                           'BBG2008', 'SBA.m2.ha', 'spp','pr.spru.ba', 'QMD.cm'
+                         )
+
 }
 

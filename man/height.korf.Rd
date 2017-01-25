@@ -7,10 +7,10 @@ Simple height function
 \description{
   A simple tree height function based on tree species, and DBH. It returns the
 difference between the height at the current period (this.period) and
-the estimated height.
+the next period.
 }
 \usage{
-height.korf(common.vars, this.period, tr,  ...)
+height.korf(common.vars, this.period, tr,  dbh.inc.mm, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,10 @@ The period for which to calculate the height of the trees.
 }
   \item{tr}{
 A \emph{trList}.
+}  
+
+\item{dbh.inc.mm}{
+A vector with the projected dbh increment.
 }
   \item{\dots}{
 Currently not used
@@ -66,6 +70,6 @@ common.vars <-  prep.common.vars.fun(
   treslag.lauv = c(30, 31)
 )
 height.korf(common.vars = common.vars$res, this.period = 't0', 
-    tr.i, fl) 
+    tr.i, fl, dbh.inc.mm = runif(nrow(tr.i$data$dbh.mm), 5, 80)) 
 }
 
