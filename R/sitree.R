@@ -297,36 +297,35 @@ sitree <- function(tree.df,
     ## extract
     if (sum(i.dead.trees) > 0) {
       new.dead.trees <-  tr$extractTrees(which(i.dead.trees))
-    }
-    ## create dead trees class object
-    new.dead.trees <- trListDead$new(
-      data = new.dead.trees,
-      last.measurement = cbind(
-        do.call("dead.trees.growth"
-              , args = list(
+    
+      ## create dead trees class object
+      new.dead.trees <- trListDead$new(
+        data = new.dead.trees,
+        last.measurement = cbind(
+          do.call("dead.trees.growth"
+                , args = list(
                   dt     = new.dead.trees,
                   growth = growth,
                   mort   = i.dead.trees,
                   this.period = this.period)
-                ),
-        found.dead = next.period
-      ),
-      nperiods = tr$nperiods
-    )
+                  ),
+          found.dead = next.period
+        ),
+        nperiods = tr$nperiods
+      )
+       
+      ## remove last measurement --- we could probably skip this step if
+      ## we change the code slightly, if only alived trees are grown
+      new.dead.trees$remove.next.period(next.period = next.period)
+      ## If this is the first period create the dead.trees object, if not
+      ## add the new dead trees to the dead.trees object
+      if (i.period == 0){
+        dead.trees <- new.dead.trees
+      } else{
+        dead.trees$addTrees(new.dead.trees)
+      }
+    } else if (i.period == 0) dead.trees <- new.dead.trees
     if (print.comments) print("Dead trees applied")
-
-    ## remove last measurement --- we could probably skip this step if
-    ## we change the code slightly, if only alived trees are grown
-    new.dead.trees$remove.next.period(next.period = next.period)
-    ## If this is the first period create the dead.trees object, if not
-    ## add the new dead trees to the dead.trees object
-    if (i.period == 0){
-      dead.trees <- new.dead.trees
-    } else{
-      dead.trees$addTrees(new.dead.trees)
-    }
-
-
     
     ## REMOVED TREES
     ## extract
