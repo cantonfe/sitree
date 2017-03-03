@@ -151,19 +151,18 @@ prep.common.vars.fun <- function(tr,
                                   )
       ## recalcualte stand.age.years based on tree data
       tree.BA.m2 <- ustandID <-
-          NULL ## this avoid note no visible binding for global variable
+                NULL ## this avoid note no visible binding for global variable
       DT <- data.table(tree.BA.m2 = res$tree.BA.m2,
                        tree.age.years = tree.age.years,
                        ustandID = tr$data$ustandID
                        ) ## +- 1 year
       setkeyv(DT, 'ustandID')
-
-
+      
+      
       s.age <- DT[ ,
-                  list(wret =
-                         mean(tree.age.years),
-                       w = (tree.BA.m2 /sum(tree.BA.m2))
-                       )
+                  list(wret = mean(tree.age.years),
+		  w = (tree.BA.m2 /sum(tree.BA.m2))
+                      )
                 , by = ustandID]
       
       
