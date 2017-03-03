@@ -1,6 +1,6 @@
 Package: sitree
 Version: 0.1-1
-Date: 2017-01-12
+Date: 2017-03-01
 Title: Single Tree Simulator
 Authors@R: c(person("Clara", "Anton Fernandez", role = c("aut", "cre"),
 		     email = "caf@nibio.no"),

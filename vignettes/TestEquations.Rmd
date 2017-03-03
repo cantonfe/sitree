@@ -509,4 +509,4 @@ Bollandsås, O. 2007 *Uneven-aged Forestry in Norway: Inventory and Management
 Models.* [Ås, Norway]: Norwegian University of Life Sciences,
 Department of Ecology and Natural Resource Management.
 
-Eid, T., and Tuhus E. 2001 Models for Individual Tree Mortality in Norway. *Forest Ecology and Management* **154** (1/2): 69–84. doi:10.1016/S0378-1127(00)00634-4.
+Eid, T., and Tuhus E. 2001 Models for Individual Tree Mortality in Norway. *Forest Ecology and Management* **154** (1/2): 69–84. 
