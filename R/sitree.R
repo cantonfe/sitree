@@ -69,12 +69,13 @@ sitree <- function(tree.df,
   rm(trl, tr.rest)
 
 ### stand data, a data.frame or list
-    fl <- as.list(stand.df)
-    ## create the management data frame
+  fl <- as.list(stand.df)
+  ## create the management data frame if it does not exist
+  if (!"management" %in% names(fl)){
     fl$management <- data.frame(matrix(NA, ncol = n.periods,
                                        nrow = length(fl$ustandID)))
     names(fl$management) <- paste0("t", 1:n.periods)
-
+  }
 ######################################
   ## VARS REQUIRED
 ######################################
@@ -109,6 +110,7 @@ sitree <- function(tree.df,
                                       mng.options    = mng.options,
                                       vars.required  = vars.required,
                                       period.length = period.length,
+                                      print.comments = print.comments,
                                       ...
                                     )
                                     )
@@ -129,6 +131,7 @@ sitree <- function(tree.df,
                   common.vars    = common.vars,
                   vars.required  = vars.required,
                   period.length  = period.length,
+                  print.comments = print.comments,
                   ...
                 )
                 )
@@ -148,6 +151,7 @@ sitree <- function(tree.df,
                              common.vars    = common.vars,
                              vars.required  = vars.required,
                              period.length  = period.length,
+                             print.comments = print.comments,
                              ...
                            )
                            )
@@ -166,6 +170,7 @@ sitree <- function(tree.df,
                                       mng.options    = mng.options,
                                       vars.required  = vars.required,
                                       period.length = period.length,
+                                      print.comments = print.comments,
                                       ...
                                     )
                                     )
@@ -187,6 +192,7 @@ sitree <- function(tree.df,
                               next.period = next.period,
                               i.period = i.period,
                               mng.options    = mng.options,
+                              print.comments = print.comments,
                               ...)
                             )
       
@@ -211,13 +217,15 @@ sitree <- function(tree.df,
           next.period = next.period,
           i.period    = i.period,
           mng.options = mng.options,
+          print.comments = print.comments,
           ...)
       )
       if (print.comments) print(paste0('sum removed ', sum(removed)))
       if (print.comments) print('Passed removed')
     } else {
       ## we don't remove trees if there is no management
-      management <- rep(NA, length(fl$ustandID))
+      management <- list(management = rep(NA, length(fl$ustandID)))
+      fl$management[, next.period] <- management$management
       removed <- rep(FALSE, nrow(tr$data$dbh.mm))     
     }
 
@@ -233,6 +241,7 @@ sitree <- function(tree.df,
         next.period = next.period,
         i.period = i.period,
         functions = functions,
+        print.comments = print.comments,
         ...)
     )
     if (print.comments) print('Passed growth')
@@ -248,6 +257,7 @@ sitree <- function(tree.df,
         next.period = next.period,
         i.period = i.period,
         functions = functions,
+        print.comments = print.comments,
         ...)
     )
     if (print.comments) print('Passed mortality')
@@ -255,6 +265,16 @@ sitree <- function(tree.df,
 
     ## INGROWTH -natural and artificial  on all plots
     ## returns a data.frame with the new trees
+    max.tree.id <-
+      ifelse (exists('dead.trees') & exists('removed.trees'), 
+              max(c(tr$data$treeid, dead.trees$data$treeid,
+                    removed.trees$data$treeid)),
+              ifelse(exists('dead.trees'),
+                     max(c(tr$data$treeid, dead.trees$data$treeid)),
+                     ifelse(exists('removed.trees'),
+                            max(c(tr$data$treeid, removed.trees$data$treeid) ),
+                            max(tr$data$treeid)
+                     )))
     ingrowth <- do.call(
       functions$fn.recr,
       args = list(
@@ -267,6 +287,9 @@ sitree <- function(tree.df,
         management = management,
         period.length = period.length,
         vars.required  = vars.required,
+        mng.options = mng.options,
+        print.comments = print.comments,
+        max.tree.id = max.tree.id,
         ...)
     )
     
@@ -332,6 +355,7 @@ sitree <- function(tree.df,
     if (sum(removed) > 0){
       new.removed.trees <- tr$extractTrees(
         which(tr$data$treeid %in% i.removed))
+     
       ## create removed trees class object
       new.removed.trees <- trListDead$new(
         data = new.removed.trees,
@@ -352,6 +376,7 @@ sitree <- function(tree.df,
       new.removed.trees$remove.next.period(next.period = next.period)
       ## If this is the first period create the removed.trees object, if not
       ## add the new removed trees to the removed.trees object
+
       if (!exists("removed.trees")){
         removed.trees <- new.removed.trees
       } else {
@@ -363,7 +388,7 @@ sitree <- function(tree.df,
     ## Apply ingrowth
     if (length(ingrowth$treeid) > 0) tr$addTrees(ingrowth)
     
-    ## remove superfluous files
+    ## remove objects
     rm(growth, mort, new.dead.trees, management, removed)
 
     ## End of the period-loop 
@@ -409,5 +434,3 @@ sitree <- function(tree.df,
 }
 
 ## reassignInPackage("sitree", "sitree", sitree)
-
-## reassignInPackage("recr.BBG2008", "sitree", recr.BBG2008)

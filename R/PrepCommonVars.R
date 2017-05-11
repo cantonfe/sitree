@@ -206,8 +206,13 @@ prep.common.vars.fun <- function(tr,
                                                    SI.m            = fl$SI.m,
                                                    stand.age.years =
                                                      fl$stand.age.years[,this.period])
-
-      stands.final.felling <- substr(fl$management[, this.period], 1, 1) != '0'
+      if (all(is.na(fl$management[, this.period]))) {
+        stands.final.felling <- rep(FALSE, nrow(fl$management))
+      } else if (any(is.na(fl$management[, this.period]))){
+        stop ("Some of the management is NA and it should not. Check your code!")
+      } else {
+        stands.final.felling <- substr(fl$management[, this.period], 1, 1) != '0'
+      }  
       res$dev.class[stands.final.felling] <- 1
 
 
