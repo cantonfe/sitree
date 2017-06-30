@@ -14,9 +14,9 @@ mng.tree.removal <- function(tr,
   final.felling <- ifelse (substr(fl$management[, next.period],1,1) == '1', TRUE, FALSE)
   thinning <- ifelse (substr(fl$management[, next.period],2,2) == '1', TRUE, FALSE)
     
-    i.harvestable <- tr$data$ustandID %in% fl$ustandID [final.felling]
+    i.harvestable <- tr$data$plot.id %in% fl$plot.id [final.felling]
     vols <- common.vars$vol.wo.tr.m3.ha[i.harvestable]
-    uid <- tr$data$ustandID[i.harvestable]
+    uid <- tr$data$plot.id[i.harvestable]
     sum.vols <- aggregate(vols ~ uid, FUN = sum)
 
     vols <- data.frame(
@@ -39,9 +39,9 @@ mng.tree.removal <- function(tr,
     tr.removed[match(ff$treeid, tr$data$treeid )] <- ff$harvested  
         
     ## Which trees should be removed when 'Thinning' is the selected management
-    i.harvestable <- tr$data$ustandID %in% fl$ustandID [thinning]
+    i.harvestable <- tr$data$plot.id %in% fl$plot.id [thinning]
     vols <- common.vars$vol.wo.tr.m3.ha[i.harvestable]
-    uid <- tr$data$ustandID[i.harvestable]
+    uid <- tr$data$plot.id[i.harvestable]
     sum.vols <- aggregate(vols ~ uid, FUN = sum)
 
     vols <- data.frame(

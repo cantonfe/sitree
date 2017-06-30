@@ -39,7 +39,7 @@ management.prob <- function(
   ## We harvest the plot when the random number from a uniform distrib.
   ## is less or equals the probability of harvest
   
-  i.harvestable <- rep(FALSE, length(fl$ustandID))
+  i.harvestable <- rep(FALSE, length(fl$plot.id))
   i.harvestable[fl$land.use %in% 1 & fl$land.type %in% 1]      <- TRUE
   i.harvestable[is.finite(common.vars$dev.class) &
                 common.vars$dev.class %in% c(1,2) ] <- FALSE
@@ -48,11 +48,11 @@ management.prob <- function(
   ## Same as tbiH but no classes 21 and 22, because by definition only classes III-V
   ## can be "thinned"
   ##TO BE INCLUDED FOR THINNING (we will exclude later harv. plots)
-  i.thinnable <- rep(FALSE, length(fl$ustandID))
+  i.thinnable <- rep(FALSE, length(fl$plot.id))
   i.thinnable[fl$land.use %in% 1 & fl$land.type %in% 1] <- TRUE
   i.thinnable[is.finite(AgeTo3) & AgeTo3 < -6]          <- FALSE
 
-  harv <- thin <- rep(0, length(fl$ustandID))
+  harv <- thin <- rep(0, length(fl$plot.id))
   harv[i.harvestable] <- do.call (
     fun.final.felling,
     args = list(

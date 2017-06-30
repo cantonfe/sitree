@@ -11,7 +11,7 @@ A data frame with data to create the trList object needed to run \emph{sitree}.
 \format{
   The data frame contains the following columns
 	\describe{
-	\item{ustandID}{unique ID for each stand that corresponds to ustandID
+	\item{plot.id}{unique ID for each stand that corresponds to plot.id
 		in the \emph{fl} dataset}
 	\item{treeid}{unique ID for each tree}
 	\item{dbh}{dbh in mm}

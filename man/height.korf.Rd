@@ -47,7 +47,7 @@ foo.dbh[,1] <- tr$dbh
 foo.height[,1] <- tr$height
 
 trl <- list(
-  ustandID  = tr$ustandID,
+  plot.id  = tr$plot.id,
   treeid    = tr$treeid,
   dbh.mm    = foo.dbh,
   height.dm = foo.height,
@@ -65,9 +65,9 @@ common.vars <-  prep.common.vars.fun(
   mng.options    = NA,
   vars.required  = c("spp"),
   period.length = 5,
-  treslag.gran = c(1, 2, 3),
-  treslag.furu = c(10, 11, 20, 21, 29),
-  treslag.lauv = c(30, 31)
+  species.spruce = c(1, 2, 3),
+  species.pine = c(10, 11, 20, 21, 29),
+  species.harw = c(30, 31)
 )
 height.korf(common.vars = common.vars$res, this.period = 't0', 
     tr.i, fl, dbh.inc.mm = runif(nrow(tr.i$data$dbh.mm), 5, 80)) 

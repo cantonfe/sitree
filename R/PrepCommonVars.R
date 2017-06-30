@@ -21,11 +21,11 @@ prep.common.vars.fun <- function(tr,
 ########################
   ## BASIC STUFF
 ########################
-  res$i.stand <- match(tr$data[["ustandID"]], fl[[ "ustandID"]])
+  res$i.stand <- match(tr$data[["plot.id"]], fl[[ "plot.id"]])
   ## an object where we store plot (not subplot) ID
  
   ## NA mean no trees in that plot
-  res$i.tree <- match(fl$ustandID, tr$data$ustandID)
+  res$i.tree <- match(fl$plot.id, tr$data$plot.id)
   res$tree.BA.m2 <- pi * (tr$data[["dbh.mm"]][, this.period]/1000/2)^2
   
   ## SBA.m2.ha
@@ -34,8 +34,8 @@ prep.common.vars.fun <- function(tr,
   ## will be used further tdown
   ## SBA.m2.ha is calculated per subplot right tnow
   res$SBA.m2.ha <- tapply(res$tree.BA.m2 * fl[["tree2ha"]][res$i.stand],
-                          list(ustandID =  tr$data[["ustandID"]]), FUN = sum)
-  i.match.tapply <- match(tr$data[["ustandID"]], names(res$SBA.m2.ha) )
+                          list(plot.id =  tr$data[["plot.id"]]), FUN = sum)
+  i.match.tapply <- match(tr$data[["plot.id"]], names(res$SBA.m2.ha) )
   res$SBA.m2.ha <- as.vector(res$SBA.m2.ha[i.match.tapply])
   
   
@@ -43,9 +43,9 @@ prep.common.vars.fun <- function(tr,
   if (any(vars.required %in% c("spp", "pr.pine.ba", "pr.spru.ba", "pr.harw.ha",
                                "biomass.tr.components.kg")))  {
     res$spp    <- sp.classification(tree.sp = tr$data[["tree.sp"]],
-                                    treslag.gran = others$treslag.gran,
-                                    treslag.furu = others$treslag.furu,
-                                    treslag.lauv = others$treslag.lauv)
+                                    species.spruce = others$species.spruce,
+                                    species.pine = others$species.pine,
+                                    species.harw = others$species.harw)
   }
 
   ## QMD and DQ and SDI - REINEKE'S STAND DENSITY INDEX
@@ -54,13 +54,13 @@ prep.common.vars.fun <- function(tr,
   if (any(vars.required %in% c("DQ", "QMD.cm", "SDI", "tphd"))){
     ## QMD is the same as Dg
     QMD.cm <- tapply(tr$data[["dbh.mm"]][, this.period]
-                   , list(tr$data[["ustandID"]]), function(x.mm)  {
+                   , list(tr$data[["plot.id"]]), function(x.mm)  {
                      x.mm <- x.mm[is.finite(x.mm)]
                      (sqrt(sum((x.mm/10)^2)/length(x.mm)))
                    }
                    )
     res$QMD.cm <- as.vector(QMD.cm[i.match.tapply])
-    tph    <- tapply(fl[["tree2ha"]][res$i.stand],  tr$data[["ustandID"]],  sum)
+    tph    <- tapply(fl[["tree2ha"]][res$i.stand],  tr$data[["plot.id"]],  sum)
     res$tph    <- as.vector(tph[i.match.tapply])
     res$SDI    <- res$tph * (res$QMD.cm / (10*2.54)) ^ 1.605
   }
@@ -81,11 +81,11 @@ prep.common.vars.fun <- function(tr,
     pr.spp.ba$harw[res$spp %in% c("birch", "other")] <- 1
     pr.spp.ba <- pr.spp.ba * res$tree.BA.m2
     
-    dum.s <- tapply(pr.spp.ba$spru, tr$data$ustandID, sum)
-    dum.p <- tapply(pr.spp.ba$pine, tr$data$ustandID, sum)
-    dum.h <- tapply(pr.spp.ba$harw, tr$data$ustandID, sum)
-    dum.b <- tapply(pr.spp.ba$birch, tr$data$ustandID, sum)
-    dum.o <- tapply(pr.spp.ba$other, tr$data$ustandID, sum)
+    dum.s <- tapply(pr.spp.ba$spru, tr$data$plot.id, sum)
+    dum.p <- tapply(pr.spp.ba$pine, tr$data$plot.id, sum)
+    dum.h <- tapply(pr.spp.ba$harw, tr$data$plot.id, sum)
+    dum.b <- tapply(pr.spp.ba$birch, tr$data$plot.id, sum)
+    dum.o <- tapply(pr.spp.ba$other, tr$data$plot.id, sum)
     pr.spp.ba <- data.frame(spru = as.vector(dum.s),
                             pine = as.vector(dum.p),
                             harw = as.vector(dum.h),
@@ -93,7 +93,7 @@ prep.common.vars.fun <- function(tr,
                             other = as.vector(dum.o)
                             )
     pr.spp.ba <- pr.spp.ba / with(pr.spp.ba, spru + pine + harw)
-    pr.spp.ba <- pr.spp.ba[ match(tr$data$ustandID, names(dum.s)),]*100 ## in %
+    pr.spp.ba <- pr.spp.ba[ match(tr$data$plot.id, names(dum.s)),]*100 ## in %
     res$pr.spp.ba <- pr.spp.ba; rm(pr.spp.ba)
   }
   
@@ -106,7 +106,7 @@ prep.common.vars.fun <- function(tr,
     
     ## 10000 / fl[["plot.size.m2"]][res$i.stand] to convert per tree to ha
     res$PBAL.m2.ha <- ave(res$tree.BA.m2 * 10000 / fl[["plot.size.m2"]][res$i.stand], ##fl[["tree2ha"]][res$i.stand],
-                          tr$data$ustandID,
+                          tr$data$plot.id,
                           FUN = function(X){
                             ord.x <- order(X)
                             X <- sum(X[ord.x]) - cumsum(X[ord.x])
@@ -141,7 +141,7 @@ prep.common.vars.fun <- function(tr,
       ## This function estimates tree age based on stand age
       tree.age.years <- tree.age (stand.age.years  =
                                     fl$stand.age.years[,this.period][res$i.stand] ,
-                                  ustandID         = tr$data$ustandID,
+                                  plot.id         = tr$data$plot.id,
                                   tree.BA.m2       = res$tree.BA.m2       ,
                                   dbh.mm           = tr$data[["dbh.mm"]][, this.period],
                                   SI.spp     = fl$SI.m[res$i.stand] ,
@@ -150,20 +150,20 @@ prep.common.vars.fun <- function(tr,
                                   dev.class  = res$dev.class[res$i.stand]
                                   )
       ## recalcualte stand.age.years based on tree data
-      tree.BA.m2 <- ustandID <-
+      tree.BA.m2 <- plot.id <-
                 NULL ## this avoid note no visible binding for global variable
       DT <- data.table(tree.BA.m2 = res$tree.BA.m2,
                        tree.age.years = tree.age.years,
-                       ustandID = tr$data$ustandID
+                       plot.id = tr$data$plot.id
                        ) ## +- 1 year
-      setkeyv(DT, 'ustandID')
+      setkeyv(DT, 'plot.id')
       
       
       s.age <- DT[ ,
                   list(wret = mean(tree.age.years),
 		  w = (tree.BA.m2 /sum(tree.BA.m2))
                       )
-                , by = ustandID]
+                , by = plot.id]
       
       
       ## in dev.class 1 there might not be trees so
@@ -174,7 +174,7 @@ prep.common.vars.fun <- function(tr,
       ## 25 stands -ages- 90  95  95  85  85  82  75 130  90  30 120 105  65
       ## 60  88 130 135 150  40 92  80 100  80  30  25
       fl$stand.age.years[,this.period][res$dev.class > 1] <-
-        round(s.age$wret)[match(fl$ustandID[res$dev.class > 1], s.age$ustandID)]
+        round(s.age$wret)[match(fl$plot.id[res$dev.class > 1], s.age$plot.id)]
       ## if we have dev.class > 1 but no trees, we will assume class dev 3 -1 year
       devel.class <- data.frame(
         SI.m = rep(c(26, 23, 20, 17, 14, 11, 8, 6), 2),
@@ -251,10 +251,10 @@ prep.common.vars.fun <- function(tr,
           )
         res$tree.age.years[rows.new.trees,] <- cbind(NA, i.new.trees)
         i.trees  <- match(res$tree.age.years$treeid[rows.new.trees], tr$data$treeid)
-        res$i.stands <- match(tr$data$ustandID[i.trees], fl$ustandID)
+        res$i.stands <- match(tr$data$plot.id[i.trees], fl$plot.id)
         res$tree.age.years$age.years[rows.new.trees] <-
           tree.age (stand.age.years  = fl$stand.age.years[,this.period][res$i.stands],
-                    ustandID         = tr$data$ustandID[i.trees],
+                    plot.id         = tr$data$plot.id[i.trees],
                     tree.BA.m2       = res$tree.BA.m2[i.trees],
                     dbh.mm           = tr$data[["dbh.mm"]][, this.period] [i.trees],
                     SI.spp           = fl$SI.spp[res$i.stands],
@@ -269,14 +269,14 @@ prep.common.vars.fun <- function(tr,
       ## recalculate stand.age.years based on tree data
       DT <- data.table(data.frame(tree.BA.m2 = res$tree.BA.m2,
                                   tree.age.years = res$tree.age.years$age.years,
-                                  ustandID = tr$data$ustandID)
+                                  plot.id = tr$data$plot.id)
                        ) ## +- 1 year
       
       s.age <- DT[,list(
         wret = weighted.mean(
           tree.age.years,
           w  = tree.BA.m2/sum(tree.BA.m2))
-      ) , by = ustandID]
+      ) , by = plot.id]
 
       ## in dev.class 1 there might not be trees so
       fl$stand.age.years[,this.period][res$dev.class == 1 & !stands.final.felling] <-
@@ -288,7 +288,7 @@ prep.common.vars.fun <- function(tr,
                                                    stand.age.years =
                                                      fl$stand.age.years[,this.period])
       fl$stand.age.years[,this.period][res$dev.class > 1] <-
-        round(s.age$wret)[match(fl$ustandID[res$dev.class > 1], s.age$ustandID)]
+        round(s.age$wret)[match(fl$plot.id[res$dev.class > 1], s.age$plot.id)]
       ## if we have dev.class > 1 but no trees, we will assume class dev 3 -1 year
       devel.class <- data.frame(
         SI.m = rep(c(26, 23, 20, 17, 14, 11, 8, 6), 2),
@@ -451,11 +451,11 @@ prep.common.vars.fun <- function(tr,
     
     ## individual tree volume to vuprha.m3.ha
     vuprha.m3.ha <- tapply( X    = vol.wo.bark.l/1000*fl$tree2ha[res$i.stand],
-                           INDEX = list (ustandID = tr$data$ustandID),
+                           INDEX = list (plot.id = tr$data$plot.id),
                            FUN   = sum, na.rm = TRUE)
     
     ## making sure it is correctly ordered 
-    res$vuprha.m3.ha <- as.vector(vuprha.m3.ha[match(fl$ustandID,
+    res$vuprha.m3.ha <- as.vector(vuprha.m3.ha[match(fl$plot.id,
                                                      names(vuprha.m3.ha))])
     res$vuprha.m3.ha[is.na(res$vuprha.m3.ha)] <- 0
     res$vol.wo.tr.m3.ha <- vol.wo.bark.l / 1000 * fl$tree2ha[res$i.stand]
@@ -487,7 +487,7 @@ prep.common.vars.fun <- function(tr,
   if(any(vars.required %in% c("time.since.final.felling"))){
     
     if(i.period==0){
-      time.intern <- rep(NA,length.out=length(fl$ustandID))
+      time.intern <- rep(NA,length.out=length(fl$plot.id))
     }else{
       
       time.intern <- fl$time.since.final.felling

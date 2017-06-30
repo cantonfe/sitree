@@ -71,7 +71,7 @@ trList <- setRefClass(Class    = "trList",
                           as.list = function(){
                               'Method for converting to class list'
                               return(getTrees(
-                                  i = 1:length(data$ustandID)
+                                  i = 1:length(data$plot.id)
                                   , j = 1:(nperiods+1)
                                   ))
                           }

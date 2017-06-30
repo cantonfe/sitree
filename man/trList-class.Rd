@@ -39,7 +39,7 @@ showClass("trList")
 \section{Fields}{
   \describe{
     \item{\code{data}:}{Object of class \code{list} containing the
-			unique stand ID (ustandID), the tree ID (treeid), and dbh (dbh.mm)
+			unique stand ID (plot.id), the tree ID (treeid), and dbh (dbh.mm)
 			and height (height.dm) for all the periods }
     \item{\code{nperiods}:}{Object of class \code{integer} containing
 			the number of period that should be simulated }

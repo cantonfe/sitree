@@ -43,7 +43,7 @@ foo.dbh[,1] <- tr$dbh
 foo.height[,1] <- tr$height
 
 trl <- list(
-  ustandID  = tr$ustandID,
+  plot.id  = tr$plot.id,
   treeid    = tr$treeid,
   dbh.mm    = foo.dbh,
   height.dm = foo.height,
@@ -60,9 +60,9 @@ common.vars <-  prep.common.vars.fun(
   common.vars    = "NULL",
   vars.required  = c("spp", "SBA.m2.ha", "QMD.cm"),
   period.length = 5,
-  treslag.gran = c(1, 2, 3),
-  treslag.furu = c(10, 11, 20, 21, 29),
-  treslag.lauv = c(30, 31)
+  species.spruce = c(1, 2, 3),
+  species.pine = c(10, 11, 20, 21, 29),
+  species.harw = c(30, 31)
 )
 
 

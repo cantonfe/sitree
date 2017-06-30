@@ -2,7 +2,7 @@
 
 ## This function estimates tree age based on stand age
 tree.age <- function(stand.age.years  ,# = fl$stand.age.year[i.stand] ,
-                     ustandID         ,# = tr$data$ustandID,
+                     plot.id         ,# = tr$data$plot.id,
                      tree.BA.m2       ,
                      dbh.mm           ,
                      SI.spp           ,
@@ -52,26 +52,26 @@ tree.age <- function(stand.age.years  ,# = fl$stand.age.year[i.stand] ,
     }
     
     x <- by(data.frame(tree.ages, stand.age.years, tree.BA.m2),
-            list( ustandID),
+            list( plot.id),
             FUN = correction)
-    x <- data.frame(ustandID = names(x), x = as.numeric(x))
-    ## head(x$x[match(ustandID, x$ustandID)][i.young])
+    x <- data.frame(plot.id = names(x), x = as.numeric(x))
+    ## head(x$x[match(plot.id, x$plot.id)][i.young])
     
-    tree.ages <- round(tree.ages) + round(x$x[match(ustandID,
-                                                    x$ustandID)])
+    tree.ages <- round(tree.ages) + round(x$x[match(plot.id,
+                                                    x$plot.id)])
     
     ## For stands with devel.class below III we don't need age because
     ## we calculate stand
     ## age at stand level
     stand.age.min <- 20
     tree.age.min  <- 13
-    old.i <- length(unique(ustandID))
+    old.i <- length(unique(plot.id))
         
     while (sum(tree.ages[!i.young] < 13 |  tree.ages[!i.young] > 400) > 0){
       
-      i.fix <- unique( ustandID[tree.ages[!i.young] < 13 |
+      i.fix <- unique( plot.id[tree.ages[!i.young] < 13 |
                                   tree.ages[!i.young] > 400])
-      i.tree <- ustandID %in% i.fix
+      i.tree <- plot.id %in% i.fix
       ## anything below 13 will be 13
       if (old.i == length(i.fix)) tree.age.min <- tree.age.min + 5
       tree.ages[!i.young & tree.ages < 13] <- tree.age.min
@@ -80,12 +80,12 @@ tree.age <- function(stand.age.years  ,# = fl$stand.age.year[i.stand] ,
       x <- by(data.frame(  tree.ages       = tree.ages[i.tree]
                        , stand.age.years = stand.age.years[i.tree]
                        , tree.BA.m2      = tree.BA.m2[i.tree]),
-              list( ustandID[i.tree]),
+              list( plot.id[i.tree]),
               FUN = correction)
-      x <- data.frame(ustandID = names(x), x = as.numeric(x))
+      x <- data.frame(plot.id = names(x), x = as.numeric(x))
       
       tree.ages[i.tree] <- round(tree.ages)[i.tree] +
-        round(x$x[match(ustandID[i.tree], x$ustandID)])
+        round(x$x[match(plot.id[i.tree], x$plot.id)])
       old.i <- length(i.fix)
     }
   }

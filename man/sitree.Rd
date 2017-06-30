@@ -17,13 +17,13 @@ mng.options = NA, print.comments = FALSE,...)
 \arguments{
   \item{tree.df}{
 A data frame with individual tree data. It should include four columns
-named 'ustandID' (an ID for the plot/stand that the tree belongs to),
+named 'plot.id' (an ID for the plot/stand that the tree belongs to),
 treeid (a unique ID for the tree), dbh (a measure of horizontal
 dimension), height (a measure of vertical dimension), tree.sp (tree species)
 }
   \item{stand.df}{
 A data frame or list with neccessary data on the stand (e.g. slope, site
-index). It should include a 'ustandID' that matches the one in tree.df
+index). It should include a 'plot.id' that matches the one in tree.df
 and a 'plot.size.m2', the plot size in m2. 'plot.size.m2' is only used
 in the summary.sitree function to calculate figures by ha.
 }
@@ -81,9 +81,9 @@ result.sitree <- sitree (tree.df   = tr,
                            period.length = 5,
                            mng.options = NA,
                            print.comments = FALSE,
-                           treslag.gran = c(1, 2, 3),
-                           treslag.furu = c(10, 11, 20, 21, 29),
-                           treslag.lauv = c(30, 31),
+                           species.spruce = c(1, 2, 3),
+                           species.pine = c(10, 11, 20, 21, 29),
+                           species.harw = c(30, 31),
                            fun.final.felling = "harv.prob",
                            fun.thinning      = "thin.prob",
                            'BN2009',
@@ -109,9 +109,9 @@ result.sitree <- sitree (tree.df   = stand.west.tr,
                            period.length = 5,
                            mng.options = NA,
                            print.comments = FALSE,
-                           treslag.gran = c(1, 2, 3),
-                           treslag.furu = c(10, 11, 20, 21, 29),
-                           treslag.lauv = c(30, 31),
+                           species.spruce = c(1, 2, 3),
+                           species.pine = c(10, 11, 20, 21, 29),
+                           species.harw = c(30, 31),
                            'BN2009',
                            'BBG2008', 'SBA.m2.ha', 'spp','pr.spru.ba', 'QMD.cm'
                          )

@@ -8,20 +8,20 @@ Species classifcation
 Classifies the tree species into four species groups
 }
 \usage{
-sp.classification(tree.sp, treslag.gran, treslag.furu, treslag.lauv)
+sp.classification(tree.sp, species.spruce, species.pine, species.harw)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tree.sp}{
 Tree species code.
 }
- \item{treslag.gran}{
+ \item{species.spruce}{
 A vector with the codes used to define 'spruce' group .
 }
- \item{treslag.furu}{
+ \item{species.pine}{
 A vector with the codes used to define 'pine' group .
 }
- \item{treslag.lauv}{
+ \item{species.harw}{
    A vector with the codes used to define the 'birch' group .
  }
   
@@ -30,8 +30,8 @@ A vector with the codes used to define 'pine' group .
 \value{
 Returns a vector with the classification of tree.sp into one of these
 four groups: spruce, pine, birch, and other. spruce group is defined by
-treslag.gran, pine group is defined by treslag.furu, and birch is
-defined by treslag.lauv. If a species does not fall within any of these
+species.spruce, pine group is defined by species.pine, and birch is
+defined by species.harw. If a species does not fall within any of these
 three groups is classified as 'other'.
 }
 
@@ -40,7 +40,7 @@ Clara Anton Fernandez \email{caf@nibio.no}
 }
 
 \examples{
-sp.classification(tr$tree.sp, treslag.gran = c(1,15),
-                           treslag.furu = c(2,34),
-                           treslag.lauv = c(3,4))
+sp.classification(tr$tree.sp, species.spruce = c(1,15),
+                           species.pine = c(2,34),
+                           species.harw = c(3,4))
 }

@@ -9,7 +9,7 @@ Plot data
 \format{
 	The list contains the following elements
 	\describe{
-		\item{ustandID}{unique ID for each stand that corresponds to ustandID
+		\item{plot.id}{unique ID for each stand that corresponds to plot.id
 			in the \emph{tr} dataset}
 		\item{SI.m}{Site index in m}
 		\item{SI.spp}{Species code for which SI.m is measured}

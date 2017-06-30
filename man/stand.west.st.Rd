@@ -9,7 +9,7 @@ Dataset with stand and plot data for stand.west.tr
 \format{
   A data frame with 4 observations on the following 7 variables.
   \describe{
-    \item{\code{ustandID}}{unique ID for each plot}
+    \item{\code{plot.id}}{unique ID for each plot}
     \item{\code{SI.m}}{site index in meters}
     \item{\code{SI.spp}}{species for which site index is measured}
     \item{\code{plot.size.m2}}{plot size in m2}

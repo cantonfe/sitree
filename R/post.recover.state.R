@@ -2,7 +2,7 @@
 recover.state <- function(tr, dead.trees, removed.trees){
 
   ## add dead trees
-  new.trees <- list(  ustandID = dead.trees$data$ustandID
+  new.trees <- list(  plot.id = dead.trees$data$plot.id
                   , treeid   = dead.trees$data$treeid
                   , dbh.mm   = dead.trees$data$dbh.mm
                   , height.dm = dead.trees$data$height.dm
@@ -13,7 +13,7 @@ recover.state <- function(tr, dead.trees, removed.trees){
   
   ## add removed trees if there are any
   if (!is.null(removed.trees)){
-    new.trees <- list(  ustandID = removed.trees$data$ustandID
+    new.trees <- list(  plot.id = removed.trees$data$plot.id
                     , treeid   = removed.trees$data$treeid
                     , dbh.mm   = removed.trees$data$dbh.mm
                     , height.dm = removed.trees$data$height.dm

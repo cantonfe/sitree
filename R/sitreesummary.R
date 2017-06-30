@@ -2,15 +2,15 @@
 sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
                            plot.all.together = FALSE){
 
-  nplots <- length(sitrees.res$plot.data$ustandID)
+  nplots <- length(sitrees.res$plot.data$plot.id)
   res <- list()
   
   ## plot1 -- BA per ha
-  res$i.stand <- match(sitrees.res$live$data$ustandID,
-                       sitrees.res$plot.data$ustandID)
+  res$i.stand <- match(sitrees.res$live$data$plot.id,
+                       sitrees.res$plot.data$plot.id)
   ## NA mean no trees in that plot
-  res$i.tree <- match(sitrees.res$plot.data$ustandID,
-                      sitrees.res$liv$data$ustandID)
+  res$i.tree <- match(sitrees.res$plot.data$plot.id,
+                      sitrees.res$liv$data$plot.id)
   res$tree2ha <- 10000 / sitrees.res$plot.data$plot.size.m2
   res$SBA.m2.ha <- res$stems.ha <- res$heights.10 <-
     data.frame(t0 = matrix(NA, nrow = nplots))
@@ -27,10 +27,10 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     if (1 %in% plots){
       sa <-
         aggregate(res$tree.BA.m2 * res$tree2ha[res$i.stand],
-                  by = list(ustandID =  sitrees.res$live$data$ustandID),
+                  by = list(plot.id =  sitrees.res$live$data$plot.id),
                   FUN = sum)
-      res$SBA.m2.ha[, this.period] <-  sa$x[ match(sitrees.res$plot.data$ustandID,
-                                                   sa$ustandID)]
+      res$SBA.m2.ha[, this.period] <-  sa$x[ match(sitrees.res$plot.data$plot.id,
+                                                   sa$plot.id)]
     }
     
     if (2 %in% plots){
@@ -38,31 +38,31 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
       living.trees <- (sitrees.res$live$data$dbh.mm[, this.period] > 0)
       sa <-
       aggregate(res$tree2ha[res$i.stand][living.trees],
-                by = list(ustandID =
-                            sitrees.res$live$data$ustandID[living.trees]),
+                by = list(plot.id =
+                            sitrees.res$live$data$plot.id[living.trees]),
                 FUN = sum)
-      res$stems.ha[, this.period] <-  sa$x[ match(sitrees.res$plot.data$ustandID,
-                                                  sa$ustandID)]
+      res$stems.ha[, this.period] <-  sa$x[ match(sitrees.res$plot.data$plot.id,
+                                                  sa$plot.id)]
     }
     
     if (3 %in% plots){ ## height of 10 tallest trees
       ## stems.ha
       heights <- data.frame(
         heights = sitrees.res$live$data$height.dm[, this.period],
-        ustandID = sitrees.res$live$data$ustandID
+        plot.id = sitrees.res$live$data$plot.id
       )
 
       heights <- heights[heights$heights != 0,]
-      heights <- heights[order(heights$ustandID, heights$heights),]
-      heights <- aggregate(heights ~ ustandID, data = heights,
+      heights <- heights[order(heights$plot.id, heights$heights),]
+      heights <- aggregate(heights ~ plot.id, data = heights,
                            FUN = function(x) ifelse (length(x) > 9,
                                                      mean(x[1:10]),
                                                      mean(x[1:length(x)])
                                                      )
                            )
       res$heights.10[, this.period] <-
-        heights$heights [ match(sitrees.res$plot.data$ustandID,
-                                heights$ustandID)]
+        heights$heights [ match(sitrees.res$plot.data$plot.id,
+                                heights$plot.id)]
     }
   }
 
@@ -70,30 +70,30 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     ## number of dead trees
     dead.trees <- data.frame(
       period   = sitrees.res$dead$last.measurement$found.dead,
-      ustandID = sitrees.res$dead$data$ustandID)
+      plot.id = sitrees.res$dead$data$plot.id)
     
     num.dead.trees.ha <-
       aggregate(dead.trees$period,
-                by = list(ustandID = dead.trees$ustandID,
+                by = list(plot.id = dead.trees$plot.id,
                           period = dead.trees$period),
                 FUN = length)
     num.dead.trees.ha$x <- num.dead.trees.ha$x *
-      res$tree2ha[match(num.dead.trees.ha$ustandID, sitrees.res$plot.data$ustandID)]
+      res$tree2ha[match(num.dead.trees.ha$plot.id, sitrees.res$plot.data$plot.id)]
   }
   
   if (5 %in% plots){
     ## number of removed trees
     removed.trees <- data.frame(
       period   = sitrees.res$removed$last.measurement$found.removed,
-      ustandID = sitrees.res$removed$data$ustandID)
+      plot.id = sitrees.res$removed$data$plot.id)
     
     num.removed.trees.ha <-
       aggregate(removed.trees$period,
-                by = list(ustandID = removed.trees$ustandID,
+                by = list(plot.id = removed.trees$plot.id,
                           period = removed.trees$period),
                 FUN = length)
     num.removed.trees.ha$x <- num.removed.trees.ha$x *
-      res$tree2ha[match(num.removed.trees.ha$ustandID, sitrees.res$plot.data$ustandID)]
+      res$tree2ha[match(num.removed.trees.ha$plot.id, sitrees.res$plot.data$plot.id)]
   }
   
   my.period.levels <- paste0("t", 0:sitrees.res$live$nperiods)
@@ -112,7 +112,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     } else{
       SBA.m2.ha$plot.size.m2 <-
         sitrees.res$plot.data$plot.size.m2[match(SBA.m2.ha$id,
-                                                 sitrees.res$plot.data$ustandID)]
+                                                 sitrees.res$plot.data$plot.id)]
       SBA.m2.ha$SBA.m2 <- with(SBA.m2.ha, t / 10000 * plot.size.m2)
       SBA.m2.ha <- aggregate( SBA.m2 ~ period, data = SBA.m2.ha, FUN = sum)
       my.plots$plot1 <- xyplot(SBA.m2 ~ period, 
@@ -135,7 +135,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     } else {
       stems.ha$plot.size.m2 <-
         sitrees.res$plot.data$plot.size.m2[match(stems.ha$id,
-                                                 sitrees.res$plot.data$ustandID)]
+                                                 sitrees.res$plot.data$plot.id)]
       stems.ha$stems <- with(stems.ha, t / 10000 * plot.size.m2)
       stems.ha <- aggregate( stems ~ period, data = stems.ha, FUN = sum)
       my.plots$plot2 <- xyplot(stems ~ period, groups = stems.ha$id,
@@ -162,13 +162,13 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
   if (4 %in% plots){
     if (by.stand){
       my.plots$plot4 <- xyplot(x ~ period,
-                               groups =  num.dead.trees.ha$ustandID,
+                               groups =  num.dead.trees.ha$plot.id,
                                data = num.dead.trees.ha,
                                main = "dead trees per ha", type = "l")
     } else {
       num.dead.trees.ha$plot.size.m2 <-
-        sitrees.res$plot.data$plot.size.m2[match(num.dead.trees.ha$ustandID,
-                                                 sitrees.res$plot.data$ustandID)]
+        sitrees.res$plot.data$plot.size.m2[match(num.dead.trees.ha$plot.id,
+                                                 sitrees.res$plot.data$plot.id)]
       num.dead.trees.ha$stems <- with(num.dead.trees.ha, x / 10000 * plot.size.m2)
       num.dead.trees.ha <- aggregate( stems ~ period,
                                      data = num.dead.trees.ha, FUN = sum)
@@ -182,13 +182,13 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
   if (5 %in% plots){
     if (by.stand){
       my.plots$plot5 <- xyplot(x ~ period , data = num.removed.trees.ha,
-                               groups =  num.removed.trees.ha$ustandID,
+                               groups =  num.removed.trees.ha$plot.id,
                                main = "removed trees per ha", type = "b",
                                ylab = "number of trees removed")
     } else {
       num.removed.trees.ha$plot.size.m2 <-
-        sitrees.res$plot.data$plot.size.m2[match(num.removed.trees.ha$ustandID,
-                                                 sitrees.res$plot.data$ustandID)]
+        sitrees.res$plot.data$plot.size.m2[match(num.removed.trees.ha$plot.id,
+                                                 sitrees.res$plot.data$plot.id)]
       num.removed.trees.ha$stems <-
         with(num.removed.trees.ha, x / 10000 * plot.size.m2)
       num.removed.trees.ha <- aggregate( stems ~ period,
@@ -212,11 +212,11 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
         if(3 %in% plots) heights.10 <- heights.10[,c("period", "t", "id")] else {
           heights.10 <- NA}
         if(4 %in% plots) {
-          num.dead.trees.ha <- num.dead.trees.ha[,c("period", "x", "ustandID")]
+          num.dead.trees.ha <- num.dead.trees.ha[,c("period", "x", "plot.id")]
           } else num.dead.trees.ha <- NA
         if(5 %in% plots) {
           num.removed.trees.ha <- num.removed.trees.ha[,c("period", "x",
-                                                          "ustandID")]
+                                                          "plot.id")]
           } else num.removed.trees.ha <- NA
         
         xx <- list(

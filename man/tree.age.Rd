@@ -9,7 +9,7 @@ Estimates individual tree age of trees within a plot based on basal
 area, site index, species, and development class.
 }
 \usage{
-tree.age(stand.age.years, ustandID, tree.BA.m2, dbh.mm,
+tree.age(stand.age.years, plot.id, tree.BA.m2, dbh.mm,
 SI.spp, SI.m, spp, dev.class, apply.correction = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,7 +17,7 @@ SI.spp, SI.m, spp, dev.class, apply.correction = TRUE)
   \item{stand.age.years}{
 The age of the stand in years.
 }
-  \item{ustandID}{
+  \item{plot.id}{
 The unique ID of the stand
 }
   \item{tree.BA.m2}{
@@ -53,7 +53,7 @@ Clara Anton Fernandez \email{caf@nibio.no}
 \examples{
 
 tree.age(stand.age.years = 40,
-        ustandID = c(1,1), tree.BA.m2 = c(0.05, 0.5),dbh.mm
+        plot.id = c(1,1), tree.BA.m2 = c(0.05, 0.5),dbh.mm
         = c(50,150), SI.spp = 2, 
         SI.m = 11, spp = c(1,1), dev.class = 3, apply.correction = TRUE) 
 
