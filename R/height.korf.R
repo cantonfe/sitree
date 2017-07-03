@@ -1,5 +1,7 @@
-height.korf <- function (common.vars = common.vars, this.period = this.period,
-                         tr, dbh.inc.mm, ...) 
+height.korf <- function (common.vars,
+                         this.period,
+                         tr,
+                         dbh.inc.mm, ...) 
 {
   spp <- common.vars$spp
   height <- next.height <- rep(NA, nrow(tr$data$dbh.mm))

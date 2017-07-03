@@ -48,7 +48,8 @@ trList <- setRefClass(Class    = "trList",
                                 stop("Error: missing elements in the list")}
                             if(sum(names(data) != names(value)) > 0){
                                 stop("The elements of the list are not in the correct order")}
-                            data <<- mapply(toBindLists, x = data, y = value)
+                            data <<- mapply(toBindLists, x = data, y = value,
+                                            SIMPLIFY = FALSE)
                             invisible("done")                            
                         },
                         show = function() {
@@ -113,7 +114,8 @@ trListDead <- setRefClass(Class    = "trListDead",
                               ## I need to add some object validation for value
                               data <<- mapply(toBindLists,
                                               x = data,
-                                              y = value$data[names(data)])
+                                              y = value$data[names(data)],
+                                              SIMPLIFY = FALSE)
                               last.measurement <<- rbind(last.measurement,
                                                          value$last.measurement)
                               invisible("done")

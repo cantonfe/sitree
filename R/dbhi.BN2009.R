@@ -48,6 +48,6 @@ if (!all(unique(spp) %in% c("spruce", "pine", "birch", "other"))) {
     )
   )
     
-  return(dbhi)
+  return(as.integer(round(dbhi)))
 }
 ## reassignInPackage("dbhi.BN2009", "sitree", dbhi.BN2009)
