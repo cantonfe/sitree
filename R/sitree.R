@@ -55,14 +55,20 @@ sitree <- function(tree.df,
     stop ('plot.id missing in stand.df')
   }
   tr.rest <- as.list(tree.df[, !names(tree.df) %in% names.tr])
+  ## tree species
+  ## if already a factor keep it like that, in case it has extra levels
+  ## that might be needed after
+  if (is.factor(tree.df$tree.sp)) {
+    tree.sp <- tree.df$tree.sp} else tree.sp <- factor(tree.df$tree.sp)
   trl <- list(
     plot.id  = tree.df$plot.id,
     treeid    = tree.df$treeid,
     dbh.mm    = foo(as.integer(tree.df$dbh), n.periods = n.periods ),
     height.dm = foo(as.integer(tree.df$height), n.periods = n.periods  ),
     yrs.sim   = rep(0, nrow(tree.df)),
-    tree.sp   = factor(tree.df$tree.sp)
+    tree.sp   = tree.sp
   )
+  rm(tree.sp)
   trl <- c(trl, tr.rest)
   tr <- trList$new(data = trl, nperiods = as.integer(n.periods))
   ## clean up
@@ -345,7 +351,7 @@ sitree <- function(tree.df,
       ## add the new dead trees to the dead.trees object
       
       if (i.period == 0 | !exists('dead.trees')){
-        if (print.comments) print("p2")
+        
         dead.trees <- new.dead.trees
       } else {
        
@@ -398,6 +404,7 @@ sitree <- function(tree.df,
     ## remove objects
     rm(growth, mort, new.dead.trees, management, removed)
 
+    print (tr$data$dbh.mm[tr$data$treeid == 3263, ])
     ## End of the period-loop 
   }
   if (print.comments) print('---- Fixing last period')
