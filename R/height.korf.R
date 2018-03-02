@@ -17,7 +17,6 @@ height.korf <- function (common.vars,
     exp(-11.0299 * tr$data$dbh.mm[spp %in% c('birch', 'other'),this.period]^ (-0.347))
 
   ## height next.period according to korf
-  ##browser()
   next.height[spp == 'spruce'] <- 1017.27 *
     exp(-12.697 * (tr$data$dbh.mm[spp == 'spruce',this.period] +
                      dbh.inc.mm [spp == 'spruce'])^ (-0.3562))
