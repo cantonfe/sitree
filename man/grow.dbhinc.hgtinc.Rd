@@ -80,7 +80,10 @@ grow.dbhinc.hgtinc (tr = tr.i,
                         fn.tree.removal = 'mng.tree.removal',
                         fn.modif      = NULL, #'ext.modif.fun',
                         fn.prep.common.vars = 'prep.common.vars.fun'
-                    )
+                    ),
+                    species.spruce = c(1, 2, 3),
+                    species.pine =  c(10, 11, 20, 21, 29),
+                    species.harw =  c(30, 31)
                     )
 
 }

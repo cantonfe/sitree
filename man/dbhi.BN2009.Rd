@@ -72,7 +72,10 @@ common.vars <-  prep.common.vars.fun(
   species.harw = c(30, 31)
 )
  
-dbhi.BN2009(tr.i, fl, common.vars$res , this.period = "t0")
+dbhi.BN2009(tr.i, fl, common.vars$res , this.period = "t0",
+            species.spruce = c(1, 2, 3),
+            species.pine =  c(10, 11, 20, 21, 29),
+            species.harw =  c(30, 31))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
