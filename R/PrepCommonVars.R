@@ -38,7 +38,6 @@ prep.common.vars.fun <- function(tr,
   i.match.tapply <- match(tr$data[["plot.id"]], names(res$SBA.m2.ha) )
   res$SBA.m2.ha <- as.vector(res$SBA.m2.ha[i.match.tapply])
   
-  
   ## SPP
   if (any(vars.required %in% c("spp", "pr.pine.ba", "pr.spru.ba", "pr.harw.ha",
                                "biomass.tr.components.kg")))  {

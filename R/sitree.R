@@ -404,7 +404,6 @@ sitree <- function(tree.df,
     ## remove objects
     rm(growth, mort, new.dead.trees, management, removed)
 
-    print (tr$data$dbh.mm[tr$data$treeid == 3263, ])
     ## End of the period-loop 
   }
   if (print.comments) print('---- Fixing last period')
