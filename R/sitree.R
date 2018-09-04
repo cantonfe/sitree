@@ -1,12 +1,14 @@
 
 sitree <- function(tree.df,
-                    stand.df,
-                    functions,
-                    n.periods = 5,
-                    period.length,
-                    mng.options = NA,
-                    print.comments = FALSE,
-                    ... ){
+                   stand.df,
+                   functions,
+                   n.periods = 5,
+                   period.length,
+                   mng.options = NA,
+                   print.comments = FALSE,
+                   ... ,
+                   
+                   ext.mod.first = TRUE){
   
   others <- list(...)
 
@@ -105,69 +107,75 @@ sitree <- function(tree.df,
     } else {
       existing.common.vars <-  common.vars
     }
+    if (!ext.mod.first){
+      prep.common.vars <-  do.call(functions$fn.prep.common.vars,
+                                   args = list(
+                                     tr = tr,
+                                     fl = fl,
+                                     this.period    = this.period,
+                                     i.period       = i.period,
+                                     common.vars    = existing.common.vars,
+                                     mng.options    = mng.options,
+                                     vars.required  = vars.required,
+                                     period.length = period.length,
+                                     print.comments = print.comments,
+                                     ...
+                                   )
+                                   )
+      
+      common.vars <- prep.common.vars$res
+      fl <- prep.common.vars$fl
+      if (print.comments) print('Passed common vars')
     
-    prep.common.vars <-  do.call(functions$fn.prep.common.vars,
-                                    args = list(
-                                      tr = tr,
-                                      fl = fl,
-                                      this.period    = this.period,
-                                      i.period       = i.period,
-                                      common.vars    = existing.common.vars,
-                                      mng.options    = mng.options,
-                                      vars.required  = vars.required,
-                                      period.length = period.length,
-                                      print.comments = print.comments,
-                                      ...
-                                    )
-                                    )
     
-    common.vars <- prep.common.vars$res
-    fl <- prep.common.vars$fl
-    if (print.comments) print('Passed common vars')
-
-    ## No hgt.inc but hgt function
-    if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
-      tr$data$height.dm[, this.period] <-
-        do.call(functions$fn.hgt,
-                args = list(
-                  tr = tr,
-                  fl = fl,
-                  this.period    = this.period,
-                  i.period       = i.period,
-                  common.vars    = common.vars,
-                  vars.required  = vars.required,
-                  period.length  = period.length,
-                  print.comments = print.comments,
-                  ...
-                )
-                )
+      ## No hgt.inc but hgt function
+      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
+        tr$data$height.dm[, this.period] <-
+          do.call(functions$fn.hgt,
+                  args = list(
+                    tr = tr,
+                    fl = fl,
+                    this.period    = this.period,
+                    i.period       = i.period,
+                    common.vars    = common.vars,
+                    vars.required  = vars.required,
+                    period.length  = period.length,
+                    print.comments = print.comments,
+                    ...
+                  )
+                  )
+      }
+      if (print.comments) print('Passed heights')
     }
-    if (print.comments) print('Passed heights')
+    
     ## EXTERNAL MODIFIERS
     ## External modifiers other than management, e.g. climate change
     ##   external modifieres should be a list with the elements
     ##   to be replaced in fl
     if (!is.null(functions$fn.modif) ){
-      ext.modif <- do.call(functions$fn.modif,#.scen,
+      ext.modif <- do.call(functions$fn.modif,
                            args = list(
                              tr = tr,
                              fl = fl,
                              this.period = this.period,
                              i.period    = i.period,
-                             common.vars    = common.vars,
+                             common.vars    = existing.common.vars,
                              vars.required  = vars.required,
                              period.length  = period.length,
                              print.comments = print.comments,
                              ...
                            )
                            )
+      if (!is.null(ext.modif))   fl[names(ext.modif)] <- ext.modif
+      if (print.comments) print('Passed Exter mod')
+      }
       ## apply external modifiers, they might change some variables
-      if ( !is.null(ext.modif) ) {
-        fl[names(ext.modif)] <- ext.modif
-        ## recalculate prep.common.vars, it probably change things
-        
-        prep.common.vars <- do.call(functions$fn.prep.common.vars,
-                                    args = list(
+    if (ext.mod.first ) {
+      
+      ## recalculate prep.common.vars, it probably change things
+      
+      prep.common.vars <- do.call(functions$fn.prep.common.vars,
+                                  args = list(
                                       tr = tr,
                                       fl = fl,
                                       this.period    = this.period,
@@ -178,14 +186,34 @@ sitree <- function(tree.df,
                                       period.length = period.length,
                                       print.comments = print.comments,
                                       ...
-                                    )
-                                    )
-        common.vars <- prep.common.vars$res
-        fl <- prep.common.vars$fl
+                                  )
+                                  )
+      common.vars <- prep.common.vars$res
+      fl <- prep.common.vars$fl
+      if (print.comments) print('Passed Prep common variables')
+      
+      ## No hgt.inc but hgt function
+      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
+        tr$data$height.dm[, this.period] <-
+          do.call(functions$fn.hgt,
+                  args = list(
+                    tr = tr,
+                    fl = fl,
+                    this.period    = this.period,
+                    i.period       = i.period,
+                    common.vars    = common.vars,
+                    vars.required  = vars.required,
+                    period.length  = period.length,
+                    print.comments = print.comments,
+                    ...
+                  )
+                  )
       }
+      if (print.comments) print('Passed heights')
     }
     
-    if (print.comments) print('Passed Exter mod')
+    
+   
     
     ## Management - return the management of the different plots
     if ( !is.null(functions$fn.management)){
