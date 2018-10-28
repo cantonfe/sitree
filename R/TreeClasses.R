@@ -2,82 +2,84 @@
 ########################
 ## DEFINE CLASS TREELIST
 ########################
-trList <- setRefClass(Class    = "trList",
-                      fields   = list(
-                          data     = "list",
-                          nperiods = "integer"),
-                      methods  = list(
-                        getTrees = function(i, j = (1:(nperiods+1))){
-                          'Gets tree(s) i info all fields.
+trList <-
+  setRefClass(
+    Class    = "trList",
+    fields   = list(
+      data     = "list",
+      nperiods = "integer"),
+    methods  = list(
+      getTrees = function(i, j = (1:(nperiods+1))){
+        'Gets tree(s) i info all fields.
                            j defines the columns or period names, by default it selects all
                           It does not display it, just passes the value'
-                          ## I think i only works when is numeric (not TRUE/FALSE)
-                          are.data.frame <-  sapply(data, "is.data.frame")
-                          ## create same structure as data
-                          x <- list()
-                          x[names(data) [!are.data.frame]] <- 
-                            sapply(data[!are.data.frame], "[", i, simplify = FALSE)
-                          x[names(data) [are.data.frame]] <-
-                            sapply(data[are.data.frame], "[",
-                                   i = i,
-                                   j = j,
-                                   simplify = FALSE, drop = FALSE)
-                          return(x[names(data)])
-                        },
-                        extractTrees = function(i){
-                          'Extract tree(s). Removes tree data from the tree list and
+        ## I think i only works when is numeric (not TRUE/FALSE)
+        are.data.frame <-  sapply(data, "is.data.frame")
+        ## create same structure as data
+        x <- list()
+        x[names(data) [!are.data.frame]] <- 
+          sapply(data[!are.data.frame], "[", i, simplify = FALSE)
+        x[names(data) [are.data.frame]] <-
+          sapply(data[are.data.frame], "[",
+                 i = i,
+                 j = j,
+                 simplify = FALSE, drop = FALSE)
+        return(x[names(data)])
+      },
+      extractTrees = function(i){
+        'Extract tree(s). Removes tree data from the tree list and
                            returns (invisible) the data for the trees'
-                          are.data.frame <-  sapply(data, "is.data.frame")
-                          ## get trees' data
-                          x <- getTrees(i)
-                          ## remove trees
-                          data[!are.data.frame] <<-
-                            sapply(data[!are.data.frame], "[", -i, simplify = FALSE)
-                          data[names(data) [are.data.frame]] <<-
-                            sapply(data[are.data.frame], "[",
-                                   i = -i,
-                                   j = (1:(nperiods+1)),
-                                   simplify = FALSE, drop = FALSE)
-                          invisible(x[names(data)])
-                        },
-                        addTrees = function(value){
-                            'add new trees to existing trList object'
-                          ## I need to add some object validation for value
-                            if(!is.list(value)){stop("Error the new data whould be a list")}
-                            if(!all( names(data) %in% names(value))){
-                                stop("Error: missing elements in the list")}
-                            if(sum(names(data) != names(value)) > 0){
-                                stop("The elements of the list are not in the correct order")}
-                            data <<- mapply(toBindLists, x = data, y = value,
-                                            SIMPLIFY = FALSE)
-                            invisible("done")                            
-                        },
-                        show = function() {
-                          'Method for automatically printing matrix editors'
-                          cat("Reference tree list object of class",
-                              classLabel(class(.self)), "\n")
-                          cat("Data: \n")
-                          cat("Showing the first 20 trees \n")
-                          for ( my.var in names(data)){
-                            if (is.data.frame(data[[my.var]])){
-                              cat(my.var); cat(" \n")
-                              print(data[[my.var]] [1:20,])
-                            } else {
-                              cat(my.var); cat(" \n"); print(data[[my.var]] [1:20])
-                            }
-                            cat(" \n")
-                          }
-                          
-                      },
-                          as.list = function(){
-                              'Method for converting to class list'
-                              return(getTrees(
-                                  i = 1:length(data$plot.id)
-                                  , j = 1:(nperiods+1)
-                                  ))
-                          }
-                          )
-)
+        are.data.frame <-  sapply(data, "is.data.frame")
+        ## get trees' data
+        x <- getTrees(i)
+        ## remove trees
+        data[!are.data.frame] <<-
+          sapply(data[!are.data.frame], "[", -i, simplify = FALSE)
+        data[names(data) [are.data.frame]] <<-
+          sapply(data[are.data.frame], "[",
+                 i = -i,
+                 j = (1:(nperiods+1)),
+                 simplify = FALSE, drop = FALSE)
+        invisible(x[names(data)])
+      },
+      addTrees = function(value){
+        'add new trees to existing trList object'
+        ## I need to add some object validation for value
+        if(!is.list(value)){stop("Error the new data whould be a list")}
+        if(!all( names(data) %in% names(value))){
+          stop("Error: missing elements in the list")}
+        if(sum(names(data) != names(value)) > 0){
+          stop("The elements of the list are not in the correct order")}
+        data <<- mapply(toBindLists, x = data, y = value,
+                        SIMPLIFY = FALSE)
+        invisible("done")                            
+      },
+      show = function() {
+        'Method for automatically printing matrix editors'
+        cat("Reference tree list object of class",
+            classLabel(class(.self)), "\n")
+        cat("Data: \n")
+        cat("Showing the first 20 trees \n")
+        for ( my.var in names(data)){
+          if (is.data.frame(data[[my.var]])){
+            cat(my.var); cat(" \n")
+            print(data[[my.var]] [1:20,])
+          } else {
+            cat(my.var); cat(" \n"); print(data[[my.var]] [1:20])
+          }
+          cat(" \n")
+        }
+        
+      },
+      as.list = function(){
+        'Method for converting to class list'
+        return(getTrees(
+          i = 1:length(data$plot.id)
+        , j = 1:(nperiods+1)
+        ))
+      }
+    )
+  )
 
 
 
@@ -107,7 +109,7 @@ trListDead <- setRefClass(Class    = "trListDead",
                                   FUN         = fn.zero,
                                   next.period = next.period,
                                   simplify    = FALSE
-                                  )
+                                )
                               data$yrs.sim <<- data$yrs.sim - 2.5
                             },
                             addTrees = function(value){
@@ -129,5 +131,5 @@ trListDead <- setRefClass(Class    = "trListDead",
                               dum <- apply(dum, 1, last.zero)
                               invisible(dum)
                             }
-                              )
+                          )
                           )

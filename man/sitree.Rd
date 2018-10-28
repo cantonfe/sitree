@@ -11,7 +11,7 @@ include the effect of external modifiers such as climate change.
 }
 \usage{
 sitree(tree.df, stand.df, functions, n.periods = 5, period.length,
-mng.options = NA, print.comments = FALSE,...)
+mng.options = NA, print.comments = FALSE,..., ext.mod.first = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -48,7 +48,10 @@ Management options and definitions to be passed further.
 TRUE/FALSE Print comments. It is meant to help debugging new functions.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
+Further arguments to pass to functions used during simulation.
+}
+  \item{ext.mod.first}{
+If TRUE (default) the external modifier functions will be run before fn.prep.common.vars.
 }
 }
 
