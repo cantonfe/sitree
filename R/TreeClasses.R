@@ -45,7 +45,7 @@ trList <-
       addTrees = function(value){
         'add new trees to existing trList object'
         ## I need to add some object validation for value
-        if(!is.list(value)){stop("Error the new data whould be a list")}
+        if(!is.list(value)){stop("Error the new data should be a list")}
         if(!all( names(data) %in% names(value))){
           stop("Error: missing elements in the list")}
         if(sum(names(data) != names(value)) > 0){

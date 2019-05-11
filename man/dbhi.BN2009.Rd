@@ -77,7 +77,4 @@ dbhi.BN2009(tr.i, fl, common.vars$res , this.period = "t0",
             species.pine =  c(10, 11, 20, 21, 29),
             species.harw =  c(30, 31))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

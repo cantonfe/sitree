@@ -65,7 +65,7 @@ sitree <- function(tree.df,
   trl <- list(
     plot.id  = tree.df$plot.id,
     treeid    = tree.df$treeid,
-    dbh.mm    = foo(as.integer(tree.df$dbh), n.periods = n.periods ),
+    dbh.mm    = foo(as.integer(round(tree.df$dbh)), n.periods = n.periods ),
     height.dm = foo(as.integer(tree.df$height), n.periods = n.periods  ),
     yrs.sim   = rep(0, nrow(tree.df)),
     tree.sp   = tree.sp
@@ -339,7 +339,7 @@ sitree <- function(tree.df,
     ## GROWTH
     ## grow dbh
     tr$data$dbh.mm[ next.period] <-
-      tr$data$dbh.mm[, this.period] + as.integer(growth[, "dbh.inc.mm"])
+      tr$data$dbh.mm[, this.period] + as.integer(round(growth[, "dbh.inc.mm"]))
     ##i.small.dbh <- tr$data$dbh.mm[ next.period] < 50
     ##tr$data$dbh.mm[ next.period] [i.small.dbh] <- 50
     

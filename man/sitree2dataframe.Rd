@@ -39,7 +39,7 @@ Clara Anton Fernandez
 
 \examples{
 
-n.periods <- 40
+n.periods <- 10
 
 # Run a simulation with the example functions
 res <- sitree (tree.df   = tr,
@@ -78,7 +78,4 @@ res.dt <- sitree2dataframe.all(res)
 
 
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }% use one of  RShowDoc("KEYWORDS")
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+
