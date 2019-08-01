@@ -7,7 +7,7 @@
 ---	
 title: "sitree: An Individual Tree Open Source Simulator"
 author: "Clara Antón Fernández"
-date: 09-01-2017
+date: 31-07-2019
 output:
 	html_document:
 		toc: true
@@ -101,8 +101,6 @@ Let\'s see now some examples of the methods implemented for these RF.
                  stand.df  = fl,
                  functions = list(
                      fn.growth     = 'grow.dbhinc.hgtinc',
-                     fn.dbh.inc = "dbhi.BN2009",
-                     fn.hgt.inc =  "height.korf", 
                      fn.mort       = 'mort.B2007',
                      fn.recr       = 'recr.BBG2008',
                      fn.management = 'management.prob',
@@ -114,6 +112,8 @@ Let\'s see now some examples of the methods implemented for these RF.
                  period.length = 5,
                  mng.options = NA,
                  print.comments = FALSE,
+                 fn.dbh.inc = "dbhi.BN2009",
+                 fn.hgt.inc =  "height.korf", 
                  species.spruce = c(1, 2, 3),
                  species.pine = c(10, 11, 20, 21, 29),
                  species.harw = c(30, 31),
@@ -195,8 +195,6 @@ res <- sitree (tree.df   = tr,
                 stand.df  = fl,
                 functions = list(
                     fn.growth     = 'grow.dbhinc.hgtinc',
-                    fn.dbh.inc = "dbhi.BN2009",
-                    fn.hgt.inc =  "height.korf", 
                     fn.mort       = 'mort.B2007',
                     fn.recr       = 'recr.BBG2008',
                     fn.management = 'management.prob',
@@ -208,6 +206,8 @@ res <- sitree (tree.df   = tr,
                 period.length = 5,
                 mng.options = NA,
                 print.comments = FALSE,
+                fn.dbh.inc = "dbhi.BN2009",
+                fn.hgt.inc =  "height.korf", 
                 species.spruce = c(1, 2, 3),
                 species.pine = c(10, 11, 20, 21, 29),
                 species.harw = c(30, 31),
@@ -344,16 +344,16 @@ It is also interesting to look at the evolution of stand age
 ```{r}
 age <- res$plot.data$stand.age.years
 age.short<- reshape(age, 
-                    varying = paste0("t", 0:n.periods), 
+                    varying = paste0("t", 0:(n.periods-1)), 
                     timevar = "period",
                     idvar = "id",                    
                     direction = "long",
                     sep = ""
                     )
-head(age.short)
-histogram( ~ t | period, data = age.short, plot.points = FALSE,
-          ref = TRUE, auto.key = list(space = "right"), xmin = 50,
-          xlab = "stand age (in years)")
+##head(age.short)
+##histogram( ~ t | period, data = age.short, plot.points = FALSE,
+##          ref = TRUE, auto.key = list(space = "right"), xmin = 50,
+##          xlab = "stand age (in years)")
 ```
 
 # Switching functions
@@ -415,8 +415,6 @@ for (i in (1:i.max)){
                      stand.df  = fl,
                      functions = list(
                          fn.growth     = 'grow.dbhinc.hgtinc',
-                         fn.dbh.inc = "dbhi.BN2009",
-                         fn.hgt.inc =  "height.korf", 
                          fn.mort       = 'mort.B2007',
                          fn.recr       = 'recr.BBG2008',
                          fn.management = 'management.prob',
@@ -428,6 +426,8 @@ for (i in (1:i.max)){
                      period.length = 5,
                      mng.options = NA,
                      print.comments = FALSE,
+                     fn.dbh.inc = "dbhi.BN2009",
+                     fn.hgt.inc =  "height.korf", 
                      species.spruce = c(1, 2, 3),
                      species.pine = c(10, 11, 20, 21, 29),
                      species.harw = c(30, 31),
@@ -465,8 +465,6 @@ for (i in (1:i.max)){
                      stand.df  = fl,
                      functions = list(
                          fn.growth     = 'grow.dbhinc.hgtinc',
-                         fn.dbh.inc = "dbhi.BN2009",
-                         fn.hgt.inc =  "height.korf", 
                          fn.mort       = 'ET2001',
                          fn.recr       = 'recr.BBG2008',
                          fn.management = 'management.prob',
@@ -477,7 +475,9 @@ for (i in (1:i.max)){
                      n.periods = n.periods,
                      period.length = 5,
                      mng.options = NA,
-                     print.comments = FALSE,
+                     print.comments = FALSE,                   
+                     fn.dbh.inc = "dbhi.BN2009",
+                     fn.hgt.inc =  "height.korf", 
                      species.spruce = c(1, 2, 3),
                      species.pine = c(10, 11, 20, 21, 29),
                      species.harw = c(30, 31),

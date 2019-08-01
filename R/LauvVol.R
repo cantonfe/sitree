@@ -25,14 +25,13 @@ function (tsl, dbh, trh, bark, enhet)
         vol <- 0.1 * (-18.6827 + (2.1461 * (dmb^2)) + (0.1283 * 
             (dmb^2) * h) + (0.138 * dmb * (h^2)) - (0.6311 * 
             (h^2)))
-    }
-    else if (bark == "ub") {
-        vol <- 0.1 * (-14.8081 + (1.6949 * (dub^2)) + (0.1834 * 
-            (dub^2) * h) + (0.1018 * dub * (h^2)) - (0.451 * 
-            (h^2)))
+    } else if (bark == "ub") {
+      vol <- 0.1 *
+        (-14.8081 + (1.6949 * (dub^2)) +
+           (0.1834 * (dub^2) * h) + (0.1018 * dub * (h^2)) - (0.451 *  (h^2)))
     }
     if (enhet == "l") {
-        return(round(vol))
+        return(vol)
     }
     else if (enhet == "c") {
         return(round(vol * 100))

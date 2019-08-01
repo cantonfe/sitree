@@ -17,9 +17,9 @@ function (dbh, trh, bark, enhet)
             ((dub + 40)^(-0.9359))
     }
     if (enhet == "l") {
-        return(round(vol))
+        return(vol)
     }
     else if (enhet == "c") {
-        return(round(vol * 100))
+        return(vol * 100)
     }
 }

@@ -1,12 +1,10 @@
 Package: sitree
-Version: 0.1-6
-Date: 2019-04-11
+Version: 0.1-7
+Date: 2019-07-29
 Title: Single Tree Simulator
-Authors@R: c(person("Clara", "Anton Fernandez", role = c("aut", "cre"),
-		     email = "caf@nibio.no"),
-	      person("Nikolas", "von Lupke", role = "ctb"))
-Author: Clara Anton Fernandez [aut, cre],
-  Nikolas von Lupke [ctb]
+Authors@R: person("Clara", "Anton Fernandez", role = c("aut", "cre"),
+		     email = "caf@nibio.no")
+Author: Clara Anton Fernandez [aut, cre]
 Maintainer: Clara Anton Fernandez <caf@nibio.no>
 Depends: R (>= 3.1.0)
 Imports: data.table, methods, lattice, latticeExtra

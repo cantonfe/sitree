@@ -5,7 +5,7 @@
 ## (3) harvested trees
 sitree2dataframe <- function(tr.dt){ 
 	## just to make cran happy
-i.height.dm <- tree.sp <- treeid <- NULL
+i.height.dm <- tree.sp <- treeid <- plot.id <- NULL
 
 
   if (!class(tr.dt) %in% c('trList', 'trListDead')) stop('the object is not of class trList')

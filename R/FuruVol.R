@@ -31,9 +31,9 @@ function (dbh, trh, bark, enhet)
             (dub[i]^2) * h[i]) + (0.008216 * dub[i] * (h[i]^2))
     }
     if (enhet == "l") {
-        return(round(vol))
+        return(vol)
     }
     else if (enhet == "c") {
-        return(round(vol * 100))
+        return(vol * 100)
     }
 }

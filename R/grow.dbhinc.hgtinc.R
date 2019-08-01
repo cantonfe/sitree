@@ -5,8 +5,9 @@ grow.dbhinc.hgtinc <-
             this.period,
             functions, ...) 
   {
-    fn.dbh.inc <- functions$fn.dbh.inc
-    fn.hgt.inc <- functions$fn.hgt.inc
+    others <- list(...)
+    fn.dbh.inc <- others$fn.dbh.inc
+    fn.hgt.inc <- others$fn.hgt.inc
 
     
     ## dbh increment

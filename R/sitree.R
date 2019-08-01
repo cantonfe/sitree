@@ -127,25 +127,6 @@ sitree <- function(tree.df,
       fl <- prep.common.vars$fl
       if (print.comments) print('Passed common vars')
     
-    
-      ## No hgt.inc but hgt function
-      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
-        tr$data$height.dm[, this.period] <-
-          do.call(functions$fn.hgt,
-                  args = list(
-                    tr = tr,
-                    fl = fl,
-                    this.period    = this.period,
-                    i.period       = i.period,
-                    common.vars    = common.vars,
-                    vars.required  = vars.required,
-                    period.length  = period.length,
-                    print.comments = print.comments,
-                    ...
-                  )
-                  )
-      }
-      if (print.comments) print('Passed heights')
     }
     
     ## EXTERNAL MODIFIERS
@@ -192,24 +173,6 @@ sitree <- function(tree.df,
       fl <- prep.common.vars$fl
       if (print.comments) print('Passed Prep common variables')
       
-      ## No hgt.inc but hgt function
-      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
-        tr$data$height.dm[, this.period] <-
-          do.call(functions$fn.hgt,
-                  args = list(
-                    tr = tr,
-                    fl = fl,
-                    this.period    = this.period,
-                    i.period       = i.period,
-                    common.vars    = common.vars,
-                    vars.required  = vars.required,
-                    period.length  = period.length,
-                    print.comments = print.comments,
-                    ...
-                  )
-                  )
-      }
-      if (print.comments) print('Passed heights')
     }
     
     
@@ -434,32 +397,6 @@ sitree <- function(tree.df,
 
     ## End of the period-loop 
   }
-  if (print.comments) print('---- Fixing last period')
-
-  ## For the last period calculate some of the common variables (height)
-  ## need to be recalculated, so everything is updated for the last period
-  i.period <- tr$nperiods 
-  this.period <- paste0("t", i.period  )
-  next.period <- paste0("t", i.period+1)
-  
-  
-  prep.common.vars <-  do.call(functions$fn.prep.common.vars,
-                                    args = list(
-                                      tr = tr,
-                                      fl = fl,
-                                      this.period    = this.period,
-                                      i.period       = i.period,
-                                      common.vars    = existing.common.vars,
-                                      mng.options    = mng.options,
-                                      vars.required  = vars.required,
-                                      period.length = period.length,
-                                      ...
-                                    )
-                                    )
-  
-   fl <- prep.common.vars$fl
-
- 
   
   if (!exists('removed.trees')) removed.trees <- NULL
   if (!exists('dead.trees'))    dead.trees    <- NULL
