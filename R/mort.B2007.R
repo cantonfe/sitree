@@ -29,7 +29,8 @@ mort.B2007 <-
     mort.B <- (1/(1 + exp(-logit)))
 
     mort <- ifelse(mort.B  >= runif(length(tr$data[["plot.id"]]), 0,1), TRUE, FALSE )
-    
+  sum(mort)
+  
     return(mort)
 }
     

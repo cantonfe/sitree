@@ -1,13 +1,15 @@
-FuruVol <-
-function (dbh, trh, bark, enhet) 
+pinus.sylvestris.vol <-
+function (dbh, trh, bark, units) 
 {
     f.dbh <- dbh
-    dmb <- dbh/10
+    dmb <- dbh/10 ## mm to cm
     f.dmb <- round(f.dbh/10, 1)
-    h <- trh/10
+    h <- trh/10 ## dm to m
+
     vol <- rep(NA, length(dbh))
     b <- 3.17935 + 1.0289 * dmb - 0.27023 * dmb/h
     b <- round(b, 2)
+
     if (bark == "ub") {
         dub <- dmb - (b/10)
         dub <- round(dub, 3)
@@ -30,10 +32,10 @@ function (dbh, trh, bark, enhet)
         vol[i] <- -3.5425 + (0.128182 * (dub[i]^2)) + (0.028268 * 
             (dub[i]^2) * h[i]) + (0.008216 * dub[i] * (h[i]^2))
     }
-    if (enhet == "l") {
-        return(vol)
+    if (units == "l") {
+        return(round(vol))
     }
-    else if (enhet == "c") {
-        return(vol * 100)
+    else if (units == "c") {
+        return(round(vol * 100))
     }
 }

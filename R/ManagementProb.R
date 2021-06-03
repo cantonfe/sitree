@@ -53,16 +53,17 @@ management.prob <- function(
   i.thinnable[is.finite(AgeTo3) & AgeTo3 < -6]          <- FALSE
 
   harv <- thin <- rep(0, length(fl$plot.id))
+
   harv[i.harvestable] <- do.call (
     fun.final.felling,
     args = list(
-      region                = fl$region[i.harvestable]
-    , skidding.distance.100m = fl$skidding.distance.100m[i.harvestable]
-    , AgeTo5              = AgeTo5[i.harvestable]
-    , vuprha.m3.ha        = common.vars$vuprha.m3.ha[i.harvestable]
-    , slope.per           = fl$slope.per[i.harvestable]
-    , SI.m                = fl$SI.m     [i.harvestable]
-    , SI.spp              = fl$SI.spp   [i.harvestable]
+      region                = fl$region[i.harvestable],
+      skidding.distance.100m = fl$skidding.distance.100m[i.harvestable],
+      AgeTo5              = AgeTo5[i.harvestable],
+      vuprha.m3.ha        = common.vars$vuprha.m3.ha[i.harvestable],
+      slope.per           = fl$slope.per[i.harvestable],
+      SI.m                = fl$SI.m     [i.harvestable],
+      SI.spp              = fl$SI.spp   [i.harvestable]
       
     )
   )
@@ -92,6 +93,7 @@ management.prob <- function(
   }
 
   vol <- 0
+
   while (abs(vol - thin.total)/thin.total * 100 > 30) {
     thinning <- ifelse( runif(length(thin),0,1) <= thin,  TRUE, FALSE)
     vol <- sum(thinning * fl$ha2total * common.vars$vuprha.m3.ha)

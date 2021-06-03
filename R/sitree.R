@@ -10,6 +10,8 @@ sitree <- function(tree.df,
                    
                    ext.mod.first = TRUE){
   
+  this.is.the.call <- match.call()
+
   others <- list(...)
 
   ## check that functions is a list
@@ -84,6 +86,7 @@ sitree <- function(tree.df,
                                        nrow = length(fl$plot.id)))
     names(fl$management) <- paste0("t", 1:n.periods)
   }
+  
 ######################################
   ## VARS REQUIRED
 ######################################
@@ -93,6 +96,7 @@ sitree <- function(tree.df,
   vars.required <- fn.vars.required(my.functions = functions, ...)
 
   
+  management <- list(management = rep(NA, length(fl$plot.id)))
   
   ## a loop over all periods
   for(i.period in (0: (tr$nperiods - 1))){
@@ -118,7 +122,9 @@ sitree <- function(tree.df,
                                      mng.options    = mng.options,
                                      vars.required  = vars.required,
                                      period.length = period.length,
+                                     n.periods = n.periods,
                                      print.comments = print.comments,
+                                     last.management = management,
                                      ...
                                    )
                                    )
@@ -127,6 +133,25 @@ sitree <- function(tree.df,
       fl <- prep.common.vars$fl
       if (print.comments) print('Passed common vars')
     
+    
+      ## No hgt.inc but hgt function
+      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
+        tr$data$height.dm[, this.period] <-
+          do.call(functions$fn.hgt,
+                  args = list(
+                    tr = tr,
+                    fl = fl,
+                    this.period    = this.period,
+                    i.period       = i.period,
+                    common.vars    = common.vars,
+                    vars.required  = vars.required,
+                    period.length  = period.length,
+                    print.comments = print.comments,
+                    ...
+                  )
+                  )
+      }
+      if (print.comments) print('Passed heights')
     }
     
     ## EXTERNAL MODIFIERS
@@ -165,7 +190,9 @@ sitree <- function(tree.df,
                                       mng.options    = mng.options,
                                       vars.required  = vars.required,
                                       period.length = period.length,
+                                      n.periods = n.periods,
                                       print.comments = print.comments,
+                                      last.management = management,
                                       ...
                                   )
                                   )
@@ -173,6 +200,24 @@ sitree <- function(tree.df,
       fl <- prep.common.vars$fl
       if (print.comments) print('Passed Prep common variables')
       
+      ## No hgt.inc but hgt function
+      if (is.null(functions$fn.hgt.inc) & !is.null(functions$fn.hgt)){
+        tr$data$height.dm[, this.period] <-
+          do.call(functions$fn.hgt,
+                  args = list(
+                    tr = tr,
+                    fl = fl,
+                    this.period    = this.period,
+                    i.period       = i.period,
+                    common.vars    = common.vars,
+                    vars.required  = vars.required,
+                    period.length  = period.length,
+                    print.comments = print.comments,
+                    ...
+                  )
+                  )
+      }
+      if (print.comments) print('Passed heights')
     }
     
     
@@ -393,7 +438,7 @@ sitree <- function(tree.df,
     if (length(ingrowth$treeid) > 0) tr$addTrees(ingrowth)
     
     ## remove objects
-    rm(growth, mort, new.dead.trees, management, removed)
+    rm(growth, mort, new.dead.trees,  removed)
 
     ## End of the period-loop 
   }
@@ -401,15 +446,15 @@ sitree <- function(tree.df,
   if (!exists('removed.trees')) removed.trees <- NULL
   if (!exists('dead.trees'))    dead.trees    <- NULL
   
-  invisible(list(live =  recover.state(tr   = tr,
+  to.return <- list(live =  recover.state(tr   = tr,
                               dead.trees    = dead.trees,
                               removed.trees = removed.trees
                               ),
                  dead = dead.trees,
                  removed = removed.trees,
                  plot.data = fl)
-            )
+  attr(to.return, 'Call') <- this.is.the.call
+  attr(to.return, 'par') <- others 
+  invisible( to.return      )
   
 }
-
-## reassignInPackage("sitree", "sitree", sitree)

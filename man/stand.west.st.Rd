@@ -11,6 +11,7 @@ Dataset with stand and plot data for stand.west.tr
   \describe{
     \item{\code{plot.id}}{unique ID for each plot}
     \item{\code{SI.m}}{site index in meters}
+    \item{\code{kom}}{municipality code}
     \item{\code{SI.spp}}{species for which site index is measured}
     \item{\code{plot.size.m2}}{plot size in m2}
     \item{\code{tree2ha}}{multiplier to convert values per tree to per hectare}

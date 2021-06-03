@@ -6,11 +6,7 @@ dbhi.BN2009 <- function (tr,
 {
    
         others <- list(...)
-  spp       <- sp.classification(tr$data[["tree.sp"]],
-                                 species.spruce = others$species.spruce,
-                                 species.pine = others$species.pine,
-                                 species.harw = others$species.harw
-                                 )
+  spp       <- common.vars$spp
   
   dbh.mm    <- tr$data[["dbh.mm"]][, this.period]
   DQ        <- tr$data[["dbh.mm"]][, this.period]/10/common.vars$QMD.cm

@@ -1,5 +1,5 @@
-GranVolV <-
-function (dbh, trh, bark, enhet) 
+picea.abies.volV <-
+function (dbh, trh, bark, units) 
 {
     dmb <- dbh/10
     h <- trh/10
@@ -16,10 +16,10 @@ function (dbh, trh, bark, enhet)
         vol <- 0.6127 * (h^2.9157) * (dub^2.0294) * ((h - 1.3)^(-1.6173)) * 
             ((dub + 40)^(-0.9359))
     }
-    if (enhet == "l") {
-        return(vol)
+    if (units == "l") {
+        return(round(vol))
     }
-    else if (enhet == "c") {
-        return(vol * 100)
+    else if (units == "c") {
+        return(round(vol * 100))
     }
 }

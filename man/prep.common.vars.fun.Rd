@@ -10,7 +10,7 @@ Function to Calculate Common Variables
 }
 \usage{
 prep.common.vars.fun(tr, fl, i.period, this.period, common.vars, vars.required,
-period.length, ...)
+period.length, n.periods, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -35,6 +35,9 @@ Variables to be calculated.
 }
   \item{period.length}{
 Length of the periods, in years.
+}
+  \item{n.periods}{
+Number of periods.
 }
   \item{\dots}{
 %%     ~~Describe \code{\dots} here~~
@@ -84,10 +87,7 @@ common.vars <-  prep.common.vars.fun(
   this.period    = "t0",
   common.vars    = "NULL",
   vars.required  = c("vol.wo.tr.m3.ha", "vuprha.m3.h"),
-  period.length = 5,
-  species.spruce = c(1, 2, 3),
-  species.pine = c(10, 11, 20, 21, 29),
-  species.harw = c(30, 31)
+  period.length = 5
 )
 str(common.vars)
 }

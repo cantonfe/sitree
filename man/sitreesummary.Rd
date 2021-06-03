@@ -48,10 +48,9 @@ Clara Anton Fernandez \email{caf@nibio.no}
 \seealso{
 \code{\link{sitree}}
 }
-\examples{
 
+\examples{
 require(sitree)
-require(lattice)
 res <- sitree (tree.df   = tr,
                stand.df  = fl,
                functions = list(
@@ -74,14 +73,9 @@ res <- sitree (tree.df   = tr,
                species.harw = c(30, 31),
                fun.final.felling = "harv.prob",
                fun.thinning      = "thin.prob",
-               'BN2009',
-               'BBG2008', 'SBA.m2.ha', 'spp','pr.spru.ba', 'QMD.cm',
                per.vol.harv = 0.83
                )
 
 summary.plots <- sitree.summary(res, plots = 1:6, by.stand = FALSE, plot = TRUE)
-
-
-
 }
 

@@ -1,5 +1,5 @@
-SitkaVol <-
-function (dbh, trh, bark, enhet) 
+sitka.vol <-
+function (dbh, trh, bark, units) 
 {
     dmb <- dbh/10
     h <- trh/10
@@ -17,10 +17,10 @@ function (dbh, trh, bark, enhet)
         vol <- 0.1507 * (h^3.7177) * (dub^1.962) * ((h - 1.3)^-2.2808) * 
             ((dub + 40)^-0.659)
     }
-    if (enhet == "l") {
+    if (units == "l") {
         return(round(vol))
     }
-    else if (enhet == "c") {
+    else if (units == "c") {
         return(round(vol * 100))
     }
 }

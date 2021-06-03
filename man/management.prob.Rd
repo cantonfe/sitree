@@ -107,10 +107,7 @@ common.vars <-  prep.common.vars.fun(
   this.period    = "t0",
   common.vars    = "NULL",
   vars.required  = c("spp", "SBA.m2.ha", "QMD.cm", "vuprha.m3.ha", "AgeTo5"),
-  period.length = 5,
-  species.spruce = c(1, 2, 3),
-  species.pine = c(10, 11, 20, 21, 29),
-  species.harw = c(30, 31)
+  period.length = 5
 )
 fl$management <- data.frame(matrix(NA, ncol = tr.i$nperiods,
                                    nrow = nrow(tr.i$data$dbh.mm)))

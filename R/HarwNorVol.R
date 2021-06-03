@@ -1,5 +1,5 @@
-LauvVol <-
-function (tsl, dbh, trh, bark, enhet) 
+harw.nor.vol <-
+function (tsl, dbh, trh, bark, units) 
 {
     dub <- rep(NA, length(dbh))
     dmb <- round(dbh/10, 3)
@@ -25,15 +25,16 @@ function (tsl, dbh, trh, bark, enhet)
         vol <- 0.1 * (-18.6827 + (2.1461 * (dmb^2)) + (0.1283 * 
             (dmb^2) * h) + (0.138 * dmb * (h^2)) - (0.6311 * 
             (h^2)))
-    } else if (bark == "ub") {
-      vol <- 0.1 *
-        (-14.8081 + (1.6949 * (dub^2)) +
-           (0.1834 * (dub^2) * h) + (0.1018 * dub * (h^2)) - (0.451 *  (h^2)))
     }
-    if (enhet == "l") {
-        return(vol)
+    else if (bark == "ub") {
+        vol <- 0.1 * (-14.8081 + (1.6949 * (dub^2)) + (0.1834 * 
+            (dub^2) * h) + (0.1018 * dub * (h^2)) - (0.451 * 
+            (h^2)))
     }
-    else if (enhet == "c") {
+    if (units == "l") {
+        return(round(vol))
+    }
+    else if (units == "c") {
         return(round(vol * 100))
     }
 }

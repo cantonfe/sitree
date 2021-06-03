@@ -68,10 +68,7 @@ common.vars <-  prep.common.vars.fun(
   common.vars    = "NULL",
   mng.options    = NA,
   vars.required  = c("spp", "SBA.m2.ha"),
-  period.length = 5,
-  species.spruce = c(1, 2, 3),
-  species.pine = c(10, 11, 20, 21, 29),
-  species.harw = c(30, 31)
+  period.length = 5
 )
 dead.trees <- mort.B2007(tr.i, fl, common.vars$res, this.period = 't0')
 sum(dead.trees)

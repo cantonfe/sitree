@@ -84,13 +84,8 @@ result.sitree <- sitree (tree.df   = tr,
                            print.comments = FALSE,
                            fn.dbh.inc = "dbhi.BN2009",
                            fn.hgt.inc =  "height.korf", 
-                           species.spruce = c(1, 2, 3),
-                           species.pine = c(10, 11, 20, 21, 29),
-                           species.harw = c(30, 31),
                            fun.final.felling = "harv.prob",
                            fun.thinning      = "thin.prob",
-                           'BN2009',
-                           'BBG2008', 'SBA.m2.ha', 'spp','pr.spru.ba', 'QMD.cm',
                            per.vol.harv = 0.83
                            )
 str(result.sitree)
@@ -111,12 +106,7 @@ result.sitree <- sitree (tree.df   = stand.west.tr,
                            mng.options = NA,
                            print.comments = FALSE,
                            fn.dbh.inc = "dbhi.BN2009",
-                           fn.hgt.inc =  "height.korf", 
-                           species.spruce = c(1, 2, 3),
-                           species.pine = c(10, 11, 20, 21, 29),
-                           species.harw = c(30, 31),
-                           'BN2009',
-                           'BBG2008', 'SBA.m2.ha', 'spp','pr.spru.ba', 'QMD.cm'
+                           fn.hgt.inc =  "height.korf"
                          )
 
 }

@@ -64,10 +64,7 @@ common.vars <-  prep.common.vars.fun(
   common.vars    = "NULL",
   mng.options    = NA,
   vars.required  = c("spp"),
-  period.length = 5,
-  species.spruce = c(1, 2, 3),
-  species.pine = c(10, 11, 20, 21, 29),
-  species.harw = c(30, 31)
+  period.length = 5
 )
 height.korf(common.vars = common.vars$res, this.period = 't0', 
     tr.i, fl, dbh.inc.mm = runif(nrow(tr.i$data$dbh.mm), 5, 80)) 
