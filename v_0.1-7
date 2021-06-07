@@ -1,0 +1,4 @@
+This is the version of sitree used to run the examples in the sitree manuscript. 
+I have added a new function to convert sitree output format to data.frames. I have also changes the examples to be more
+consistent with the general structure of sitree.
+I have simplified the sitree function to make it more compact.
