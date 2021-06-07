@@ -1,14 +1,14 @@
 Package: sitree
-Version: 0.1-8
-Date: 2021-06-01
+Version: 0.1-9
+Date: 2021-06-03
 Title: Single Tree Simulator
 Authors@R: person("Clara", "Anton Fernandez", role = c("aut", "cre"),
 		     email = "caf@nibio.no")
 Author: Clara Anton Fernandez [aut, cre]
 Maintainer: Clara Anton Fernandez <caf@nibio.no>
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.5.0), ggplot2
 Suggests: rmarkdown, knitr
-Imports: data.table, methods, ggplot2
+Imports: data.table, methods
 VignetteBuilder: knitr
 Description: Framework to build an individual tree simulator.
 License: GPL (>= 2)
