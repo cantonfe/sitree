@@ -111,7 +111,9 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     SBA.m2.ha$plot.id <- as.factor(SBA.m2.ha$id)
 
     if (by.stand){
-      my.plots$plot1 <- ggplot(SBA.m2.ha, aes(x = period, y = t, color = plot.id,group=plot.id)) +
+      my.plots$plot1 <-
+        ggplot(SBA.m2.ha,
+               aes(x = period, y = t, color = plot.id, group=plot.id)) +
         geom_line() + ylab("SBA.m2.ha")
 
     } else{
@@ -137,9 +139,10 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
                         direction = "long", sep = "")
     stems.ha$period <- factor(paste0("t", stems.ha$period),
                               levels = my.period.levels)
-   
+
     if (by.stand){
-      my.plots$plot2 <- ggplot(stems.ha, aes(x = period, y = t, color = plot.id, group=plot.id)) +
+      my.plots$plot2 <- ggplot(stems.ha, aes(x = period, y = t,
+                                             color = id, group=id)) +
         geom_line() + ylab("stems/ha")
     } else {
       stems.ha$plot.size.m2 <-
@@ -200,7 +203,8 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
       num.removed.trees.ha$plot.id <- as.factor(num.removed.trees.ha$plot.id)
        
       my.plots$plot5 <-
-        ggplot(num.removed.trees.ha, aes(x = period, y = x, color = plot.id,group=plot.id)) +
+        ggplot(num.removed.trees.ha, aes(x = period, y = x, color = id,
+                                         group=id)) +
         geom_line() + ylab( "removed trees per ha")
     } else {
       num.removed.trees.ha$plot.size.m2 <-
@@ -221,7 +225,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     data.summary$num.removed.trees.ha <- num.removed.trees.ha
   }
     
-  
+
   if (plot) {
     if (plot.all.together & length(my.plots) > 1){
      
@@ -294,8 +298,9 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
 
         xx$id  <-  as.factor(xx$id)
         
-        my.plots[['all_plots_figure']]  <-  ggplot(xx, aes(period, t, group = id, col = id))   + geom_line()+
-            facet_wrap(~id.plot, scales = "free") + ylab("")
+        my.plots[['all_plots_figure']]  <-  ggplot(xx, aes(period, t, group = id, col = id))   +
+          geom_line()+
+          facet_wrap(~id.plot, scales = "free") + ylab("")
         
      
             

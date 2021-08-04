@@ -1,0 +1,242 @@
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{SiTree: An Individual Tree Open Source Simulator}
+%\VignetteEncoding{UTF-8}
+-->		
+	
+---	
+title: "An introduction to SiTree"
+author: "Clara Antón Fernández"
+date: 03-08-2021
+output:
+	html_document:
+		toc: true
+		number_sections: true
+---
+
+
+# Introduction
+The **sitree** package provides a framework to implement Single Tree forest
+growth models in a fast and memory efficient way. It keep tracks of
+all alive, dead, and removed trees in
+a robust and efficient way. **SiTree** is designed to run single tree simulations
+where trees can be defined by two time-dependent variables (such as
+diameter (or basal area), and height), and on time-independent
+variable, such as tree species. **SiTree** simulates birth, growth, and death of trees
+as well as management. Functions can also be defined that
+affect characteristics of the stand (external modifiers), such as
+climate change, or fertilization. 
+
+The easiest way to start with your own simulation is probably to
+modify the example functions provided (see the *Test Equations*
+ vignette).
+
+
+# Input data
+
+Two types of input are required by **SiTree**: tree level and stand level. Tree level information is passed in `tree.df`, while stand level information is passed in `stand.df`. 
+
+`tree.df` should be a data frame with four columns named `plot.id`, `treeid`, `dbh`, `height`, and `tree.sp`, which correspond to a stand/plot ID, a tree ID, diameter, height, and tree species. 
+
+
+
+Plot and stand data is passed in `stand.df`, which should be a data
+frame or a list, with at least a column or element named `plot.id`
+which should contain all the plot IDs present in `tree.df`. Typical
+information provided in `stand.df` are plot size, elevation, site
+index, plot coordinates, distance to road, temperature or
+precipitation.
+
+An example of tree data and stand data are provided.
+```{r}
+library(sitree)
+head(tr)
+
+head(fl)
+
+```
+
+## Calculation of input variables required by the main functions: The fn.prep.common.vars function
+Many of the main functions in a simulation  use plot-level  variables,
+like competition indices (e.g. plot-level basal area). In order to
+make the code more transparent, compact, and robust all variables
+required in the sub-models that can be estimated from  tree, stand and
+plot variables  are calculated in one place. The `fn.prep.common.vars`
+function. 
+
+For example, if diameter increment is estimated as a function of initial diameter, stand basal area and number of trees per ha, both stand basal area variable and number of trees per ha should be calculated in `fn.prep.common.vars`. Other typical examples of variables calculated in the `fn.prep.common.vars` are top height (the mean height of the trees with the largest diameter in a stand), basal area of larger trees, or tree volume.
+
+The `fn.prep.common.vars` function should be provided by the user, so it fits the particular needs of the growth model selected and the data. Calculating the most common variables used in forestry should be straight forward as they are already provided in either the **SiTree** or the **SiTreeE** package.
+
+An example of a  `fn.prep.common.vars` is provided in **SiTree**.
+```{r}
+prep.common.vars.fun
+
+
+```
+
+# Tree lists: the `trList` and `trListDead` classes
+
+In order to efficiently store the list of all individual live and dead
+(and removed) trees,  two Reference classes (or refclasses) are
+defined in **SiTree**. Refclases is chosen instead of S3 or S4 classes
+because refclasses objects are mutable and the usual R copy on modify
+semantics do not apply. When simulating for long periods, or for large
+datasets (e.g. a whole national forest inventory) the risk of running
+out of memory is not negligible. Using refclasses aim at maintaining
+the memory needs to the minimum by using mutable objects for storing
+the larger objects such as represented by the tree lists. 
+
+There are two *Reference Classes* implemented in the **sitree** package,
+one for live trees (*trList*) and other for dead trees
+(*trListDead*).
+
+* *trList* This class has two fields, *data* and *nperiods*. Under
+  *data* basic information for each tree is stored (a unique stand ID
+  *plot.id*, a unique tree ID *treeid*, and dbh and height for each
+  period, *dbh.mm*, and *height.dm*). The *nperiods* field is an
+  integer that stores the number of periods to be simulated.
+
+* *trListDead* This class extends *trList*. DBH and heights
+measured while the tree was alive are stored under the *data*
+field. Also under this field information on how long the tree has been
+in the simulation can be found (*yrs.sim*). In this class the new field
+*last.measurement* stores the dimensions of the tree when it died or
+was removed. How these dimensions are calculated is defined on the
+*dead.trees.growth* function.
+
+ __Reference Classes objects are mutable, they don't use R's usual copy-on-modify
+ semantics, but are modified in place. __
+ 
+ 
+
+We have provided a function to convert the  `sitree()` output
+containing *trList* and *trListDead** objects to a data frame, the
+`sitree2dataframe` function. The resulting data frame follows the
+usual R copy on modify semantics, and most users might be more
+comfortable with it.
+
+```{r}
+result.sitree <- sitree (tree.df   = stand.west.tr,
+                           stand.df  = stand.west.st,
+                           functions = list(
+                             fn.growth     = 'grow.dbhinc.hgtinc',
+                             fn.mort       = 'mort.B2007',
+                             fn.recr       = 'recr.BBG2008',
+                             fn.management = NULL,
+                             fn.tree.removal = NULL,
+                             fn.modif      = NULL, 
+                             fn.prep.common.vars = 'prep.common.vars.fun'
+                           ),
+                           n.periods = 12,
+                           period.length = 5,
+                           mng.options = NA,
+                           print.comments = FALSE,
+                           fn.dbh.inc    = 'dbhi.BN2009',
+                           fn.hgt.inc    = 'height.korf'
+                         )
+str(result.sitree$live)
+head(sitree2dataframe(result.sitree$live))
+```
+
+# The sitree() function
+
+The `sitree()` function is the core function of the **SiTree**
+package. It is the function that runs the simulations. It requires
+tree data (`tree.df`), stand/plot data (`stand.df`), and a list
+of functions to be used in the simulation (`functions`), the
+number of periods for which to run the simulation (`n.periods`),
+and the period length (`period.length`). Management options can
+be passed through the `mng.options` argument, and it is also
+possible to  print comments about the progress of the simulation
+selecting `print.comments = TRUE`. Additional arguments needed by
+the selected functions go into the ellipsis ('...') and can be
+retrieved by simply converting it to a list, e.g. `arguments <- 
+  list(...)`.
+
+The `functions` argument must be a list containing at
+least 7 elements:
+
+
+* `fn.growth` the name of the function that implements the growth sub-model 
+* `fn.mort` the name of the function that implements the mortality sub-model
+* `fn.recr` the name of the function that implements the recruitment sub-model: ingrowth, and natural and artificial regeneration
+* `fn.management` the name of the function that implements the management (e.g. harvest), can be `NULL`
+* `fn.tree.removal` the name of the function that implements the management at the tree level, that is the selection of trees to be fell, can be NULL.
+* `fn.modif` the name of the function to calculate the effect of external modifiers, can be `NULL`
+* `fn.prep.common.vars` the name of the function to calculate
+  auxiliary variables, such as basal area of the stand (see 'The fn.prep.common.vars' subsection above) .
+
+Further details on the requirements of the functions listed above can be found
+under the section "The user-defined functions".
+
+
+
+# The user-defined functions
+
+
+The `sitree()` function is a flexible framework for  forest growth simulations. Any growth sub-model, mortality sub-model, management, etc. can be used. Some examples are provided in **SiTree** and in **SiTreeE**, but generally, the submodels functions need to be provided by the user. The examples provided in  **SiTree** and in **SiTreeE** can be used as a template. To debug the user-defined functions we suggest to use the provided example as a starting point, set `print.comments = TRUE` and switch the submodels functions one by one to test them.
+
+An example of how the list provided in the `functions` argument of `sitree` should look
+like is given below, and further details on each of the functions are provided next.
+
+
+The `fn.growth` function should return a data frame with two
+columns giving diameter increment (`dbh.inc.mm`) and height increment
+(`hgt.inc.dm`) of all live trees. This data frame should only contain
+numerical data (no missing data allowed). Care must be taken to ensure
+that the order matches that of the tree list. Examples of the growth
+functions are provided as `grow.dbhinc.hgtinc`, `dbhi.BN2009 `, and `height.korf`.
+
+The `fn.mort` function should return a `TRUE`/`FALSE`  vector of same
+length as the number of trees in the tree list. `TRUE` indicates a
+tree that will die before the next period, and `FALSE` indicates a
+tree that will stay alive. An example of a `fn.mort` function is
+provided in `mort.B2007`. 
+
+The `fn.recr` function is the function that estimates recruitment, the
+new trees for the next period. This function should return a list of
+new trees (or an empty list if there are no new trees) with elements
+`plot.id`, `treeid`, `dbh.mm`, `height.dm`, `yrs.sim` (indicates when
+are the trees incorporated to the plot, for example, in the middle of
+the period), and `tree.sp`.An example of a `fn.recr` function is provided in `recr.BBG2008`. 
+
+`fn.management` is optional. It should return a list, with at least one element
+called `management` which should be a vector with length equal to
+the number of plots in `stand.df`. The example we provide uses a
+simple code to define management (a five characters string indicating
+with a binary code (1 = present, 0 = absent) the treatments to be
+executed: harvest-thinning-fertilization-pruning-other), but any other
+way to code management can be used, as far as `fn.management` returns
+a vector. When no management will take place during the simulation
+`fn.management` can be set to `NULL`. An example of a `fn.management`
+function is provided in `management.prob`. 
+
+`fn.tree.removal` is optional. It should return a `TRUE`/`FALSE` vector indicating
+which trees are to be removed. The vector should have the same length
+as the number of trees alive at the current period. When no tree
+removal will take place during the simulation (no harvest is allowed)
+`fn.tree.removal` can be set to NULL. An example of a `fn.tree.removal`
+function is provided in `mng.tree.removal`. 
+
+
+`fn.modif` is a function that can be used to modify characteristics of
+the plot or stand, such as site index. This function is optional, and
+no example is provided in the current version of the package. It
+should return a list with names matching some of those in the
+`stand.df` data frame. After the external modifiers are calculated
+with the function defined as `fn.modif`, the elements in the plot data
+that matches those of the results of `fn.modif` are replaced before
+the rest of the simulation continues. For example, if the plot has
+been fertilized and we can assume that SI has increased by 2 meters,
+the `fn.modif` function needs to return a list with a SI element with
+all SI as in the plot data frame except for those that have
+changed. 
+
+`fn.prep.common.vars` is the function used to calculate
+everything needed for the `fn.growth`, `fn.mort`,  etc to be
+calculated. For example, the `fn.prep.common.vars` function is
+the place to calculate stand competition indices, volume, stand age,
+etc.  An  example is given in the function `prep.common.vars.fn`.
+
+

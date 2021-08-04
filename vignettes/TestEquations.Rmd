@@ -7,7 +7,7 @@
 ---	
 title: "sitree: An Individual Tree Open Source Simulator"
 author: "Clara Antón Fernández"
-date: 31-05-2021
+date: 03-08-2021
 output:
 	html_document:
 		toc: true
@@ -16,50 +16,19 @@ output:
 
 
 # Introduction
-The **sitree** package is designed to run single tree simulations
-where trees can be defined by diameter (or basal area), height, and
-tree species. **sitree** simulates birth, growth, and death of trees
-as well as management, if any. Functions can also be defined that
-affect characteristics of the stand (external modifiers), such as
-climate change, or fertilization. All variables that can be derived
-from the basic tree and stand characteristics (e.g. quadratic mean
-diameter, and tree volume) and that might be use for more than one
-function should be defined in a *fn.prep.common.var*, a function to
-prepare common variables. An example of a *fn.prep.common.var* is
-provided.
-
-The easiest way to start with your own simulation is probably to
-modify the example functions provided (see the *switching functions*
-section of this vignette).
-
 This tutorial gives examples on how you can use **sitree** to simulate
 individual tree growth, death, and harvest through time, and to compare the effects of
 changing functions (e.g. use a different mortality function) in the
 results of the simulation.
 
-# Tree data classes and methods
+For a general introduction and description of the package take a look
+at the 'Introduction to SiTree' vignette.
 
-There are two *Reference Classes* (RC) implemented in the **sitree** package,
-one for live trees (*trList*) and other for dead trees
-(*trListDead*).
+# A little note on Reference classes
+SiTree uses reference classes to keep memory usage at bay. Bare in
+mind that reference classes such as  trList and trListDead are
+modified in place. For example,
 
-* *trList* This class has two fields, *data* and *nperiods*. Under
-  *data* basic information for each tree is stored (a unique stand ID
-  *plot.id*, a unique tree ID *treeid*, and dbh and height for each
-  period, *dbh.mm*, and *height.dm*). The *nperiods* field is an
-  integer that stores the number of periods to be simulated.
-
-* *trListDead* This class extends *trList*. DBH and heights
-measured while the tree was alive are stored under the *data*
-field. Also under this field information on how long the tree has been
-in the simulation can be found (*yrs.sim*). In this class the new field
-*last.measurement* stores the dimensions of the tree when it died or
-was removed. How these dimensions are calculated is defined on the
-*dead.trees.growth* function.
-
- RC objects are mutable, they don't use R's usual copy-on-modify
- semantics, but are modified in place.
- 
 ```{r}
 ## Always bare in mind that RF trList and trListDead are modified in place
 ## Do not copy 
@@ -100,6 +69,10 @@ square.to.triangle(2)
 square$sides
 
 ```
+# Methods available for trList and trListDead (advanced)
+
+Most regular users will never need to use these methods. 
+
 Let\'s see now some examples of the methods implemented for these RF.
 
 ```{r}	
@@ -382,19 +355,14 @@ we will now try older Norwegian mortality functions. Those developed by
 Eid and Tuhus (2001).
 
 ```{r}
-ET2001 <- function (tr, fl, common.vars, this.period, ...) 
-{
-    if (!all(unique(common.vars$spp) %in% c("spruce", "pine", 
-                                            "birch", "other"))) {
-        message("spp should only contain values spruce, pine, birch, other")
-    }
+ET2001 <- function (tr, fl, common.vars, this.period, ...) {
     dbh.mm <- tr$data[["dbh.mm"]][, this.period]
     p.functions <-
-        data.frame(a0 = c( 8.059,   8.4904, 4.892,  5.157),
-                   b1 = c(-6.702, -14.266, -2.528, -7.3544),
-                   b2 = c(-0.028,  -0.0462, 0,     -0.0199),
-                   b3 = c(-0.0264, -0.0761, 0,     0 ),
-                   b4 = c(-0.0132, -0.0761, 0,     0 )
+        data.frame(a0 = c( 8.06,   8.49, 4.89,  5.16),
+                   b1 = c(-6.7, -14.27, -2.528, -7.35),
+                   b2 = c(-0.03,  -0.05, 0,     -0.02),
+                   b3 = c(-0.03, -0.08, 0,     0 ),
+                   b4 = c(-0.01, -0.08, 0,     0 )
                    )
     rownames(p.functions) <- c("spruce", "pine", "birch", "other")
   
@@ -404,115 +372,115 @@ ET2001 <- function (tr, fl, common.vars, this.period, ...)
         p.functions[common.vars$spp, "b3"] * fl$SI.m[common.vars$i.stand] + 
         p.functions[common.vars$spp, "b4"] * common.vars$pr.spp.ba$spru
     mort.B <- 1- (1/(1 + exp(-logit)))
-    mort <- ifelse(mort.B >= runif(length(tr$data[["plot.id"]]), 
-                                   0, 1), TRUE, FALSE)
+    mort <- ifelse(mort.B >= runif(nrow(tr$data$dbh.mm),  0, 1), TRUE, FALSE)
     return(mort)
 }
+
 ```
 
-Let\'s take a look at standing volume, but first, since there are several
-stochastic algorithms in the functions selected to run the simulation, 
-we will calculate averages for several runs. The code below can be
-easily run in parallel but we will keep it in a simmple loop for the
-shake of clarity.
+We will test the performance of this new function by simply comparing the development of the stand basal area for 80 years. Since both `ET2001` and `mort.B2007` and implemented stochastically, we will average the stand basal area of 20 runs. This could also be implemented easily in parallel. We first run the simulation with the `ET2001` function: 
 
 
-First, let\'s run it with mort.B2007
-```{r eval = FALSE}
+```{r}
+SBA.m2.ha <- list()
 set.seed(2017)
-n.periods <- 10
-i.max <- 20
-vol.1 <- data.frame(matrix(NA, ncol = n.periods +1, nrow = i.max))
-names(vol.1) <- paste0("t", 0:n.periods)
-
-
-for (i in (1:i.max)){
-    print(i)
-    res1 <- sitree (tree.df   = tr,
-                     stand.df  = fl,
-                     functions = list(
-                         fn.growth     = 'grow.dbhinc.hgtinc',
-                         fn.mort       = 'mort.B2007',
-                         fn.recr       = 'recr.BBG2008',
-                         fn.management = 'management.prob',
-                         fn.tree.removal = 'mng.tree.removal',
-                         fn.modif      = NULL,
-                         fn.prep.common.vars = 'prep.common.vars.fun'
-                     ),
-                     n.periods = n.periods,
-                     period.length = 5,
-                     mng.options = NA,
-                     print.comments = FALSE,
-                     fn.dbh.inc = "dbhi.BN2009",
-                     fn.hgt.inc =  "height.korf",
-                     fun.final.felling = "harv.prob",
-                     fun.thinning      = "thin.prob",
-                     per.vol.harv = 0.83
-                     )
-     
-    for (i.period in 0:n.periods){
-        sa <- prep.common.vars.fun (
-            tr = res1$live, fl= res1$plot.data,
-            i.period, this.period = paste0("t", i.period),
-            common.vars = NULL, 
-            period.length = 5 )
-        
-        vol.1[i, (i.period +1)] <- sum(sa$res$vuprha.m3.ha * sa$fl$ha2total )
-       
-    }
-}
-
-```
-
-And now with *ET2001*.
-
-```{r eval = FALSE}
-
-vol.2 <- data.frame(matrix(NA, ncol = n.periods+1, nrow = i.max))
-names(vol.2) <- paste0("t", 0:n.periods)
-
-for (i in (1:i.max)){
-    print(i)
-
-    res2 <- sitree (tree.df   = tr,
-                     stand.df  = fl,
-                     functions = list(
-                         fn.growth     = 'grow.dbhinc.hgtinc',
-                         fn.mort       = 'ET2001',
-                         fn.recr       = 'recr.BBG2008',
-                         fn.management = 'management.prob',
-                         fn.tree.removal = 'mng.tree.removal',
-                         fn.modif      = NULL, 
-                         fn.prep.common.vars = 'prep.common.vars.fun'
-                     ),
-                     n.periods = n.periods,
-                     period.length = 5,
-                     mng.options = NA,
-                     print.comments = FALSE,                   
-                     fn.dbh.inc = "dbhi.BN2009",
-                     fn.hgt.inc =  "height.korf", 
-                     fun.final.felling = "harv.prob",
-                     fun.thinning      = "thin.prob",
-                     per.vol.harv = 0.83
-                     )
-   
-    for (i.period in 0:n.periods){
-        sa <- prep.common.vars.fun (
-            tr = res1$live, fl= res1$plot.data,
-            i.period, this.period = paste0("t", i.period),
-            common.vars = NULL, vars.required = "vuprha.m3.ha", 
-            period.length = 5 )
-        
-        vol.2[i, (i.period +1)] <- sum(sa$res$vuprha.m3.ha * sa$fl$ha2total )
-       
-    }
-}
-## During the five periods, there is actually not that much of a difference
-colMeans(vol.1)/1e6
-colMeans(vol.2)/1e6
+for ( i.to in 1:20){
+ 
+  result.sitree.ET2001 <-
+    sitree (tree.df   = tr,
+            stand.df  = fl,
+            functions = list(
+              fn.growth     = 'grow.dbhinc.hgtinc',
+              fn.mort       = 'ET2001',
+              fn.recr       = 'recr.BBG2008',
+              fn.management = NULL,
+              fn.tree.removal = NULL,
+              fn.modif      = NULL, 
+              fn.prep.common.vars = 'prep.common.vars.fun'
+            ),
+            n.periods = 16,
+            period.length = 5,
+            mng.options = NA,
+            print.comments = FALSE,
+            fn.dbh.inc    = 'dbhi.BN2009',
+            fn.hgt.inc    = 'height.korf'
+            )
     
+  ## We extract basal area from sitree.summary
+  SBA.m2.ha[[i.to]] <-
+    attr(sitree.summary(
+      result.sitree.ET2001,
+      plots = c(1),
+      by.stand = TRUE,
+      plot.all.together = TRUE,
+      plot = FALSE), "data")$SBA.m2.ha
+}
+
+library(data.table)
+SBA.m2.ha.ET2001 <- rbindlist(SBA.m2.ha)
+SBA.m2.ET2001 <- aggregate(t ~ period + plot.id, data = SBA.m2.ha.ET2001,
+                              FUN = mean)                              
+```
+We run the simulation now with mortality function `mort.B2007` implemented in sitree:
+
+```{r}
+
+SBA.m2.ha <- list()
+set.seed(2017)
+for ( i.to in 1:20){
+  
+  result.sitree <-
+    sitree (tree.df   = tr,
+            stand.df  = fl,
+            functions = list(
+              fn.growth     = 'grow.dbhinc.hgtinc',
+              fn.mort       = 'mort.B2007',
+              fn.recr       = 'recr.BBG2008',
+              fn.management = NULL,
+              fn.tree.removal = NULL,
+              fn.modif      = NULL, 
+              fn.prep.common.vars = 'prep.common.vars.fun'
+            ),
+            n.periods = 16,
+            period.length = 5,
+            mng.options = NA,
+            print.comments = FALSE,
+            fn.dbh.inc    = 'dbhi.BN2009',
+            fn.hgt.inc    = 'height.korf'
+            )
+  ## Basal area
+  SBA.m2.ha[[i.to]] <- attr(sitree.summary(
+    result.sitree,
+    plots = c(1),
+    by.stand = TRUE,
+    plot.all.together = TRUE,
+    plot = FALSE), "data")$SBA.m2.ha
+  
+}
+
+SBA.m2.ha.B2007 <- rbindlist(SBA.m2.ha)
+SBA.m2.B2007 <- aggregate(t ~ period + plot.id, data = SBA.m2.ha.B2007,
+                              FUN = mean)
+
+SBA.m2.B2007$mort <- "mort.B2007"
+SBA.m2.ET2001$mort <- "ET2001"
+
 
 ```
+We can now visualize the stand basal area development for the first 10 plots using the different mortality functions:
+ 
+```{r}
+mort.data <- rbind(SBA.m2.B2007, SBA.m2.ET2001)
+mort.data$uid  <- as.factor(paste0(mort.data$plot.id, mort.data$mort))
+ggplot(mort.data[mort.data$plot.id %in% 1:10,],
+       aes(  period, t, col = mort, group = uid)) +
+  geom_line() + ylab ( "Stand basal area (m2)")+ 
+  theme(legend.title = element_blank())
+
+```
+ 
+The resulting figure  shows the differences in stand basal area between the two mortality sub-models for the first 10 plots. 
+
 
 # References
 
