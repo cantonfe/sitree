@@ -1,6 +1,6 @@
 Package: sitree
-Version: 0.1-9
-Date: 2021-08-03
+Version: 0.1-10
+Date: 2021-09-22
 Title: Single Tree Simulator
 Authors@R: person("Clara", "Anton Fernandez", role = c("aut", "cre"),
 		     email = "caf@nibio.no")

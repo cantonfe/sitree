@@ -114,7 +114,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
       my.plots$plot1 <-
         ggplot(SBA.m2.ha,
                aes(x = period, y = t, color = plot.id, group=plot.id)) +
-        geom_line() + ylab("SBA.m2.ha")
+        geom_line() + ylab("SBA (m2/ha)")
 
     } else{
       SBA.m2.ha$plot.size.m2 <-
@@ -124,7 +124,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
       SBA.m2.ha <- aggregate( SBA.m2 ~ period, data = SBA.m2.ha, FUN = sum)
 
       my.plots$plot1 <-
-        ggplot(SBA.m2.ha, aes(period, SBA.m2, group = 1))   + geom_line() + ylab("SBA.m2.ha")
+        ggplot(SBA.m2.ha, aes(period, SBA.m2, group = 1))   + geom_line() + ylab("SBA (m2/ha)")
       
     }
     data.summary$SBA.m2.ha <- SBA.m2.ha
@@ -169,7 +169,7 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
     heights.10$plot.id <- as.factor(heights.10$id)
     
     my.plots$plot3 <- ggplot(heights.10, aes(x = period, y = t, color = plot.id, group=plot.id)) +
-        geom_line() + ylab("Average height of the 10 tallest trees")
+        geom_line() + ylab("Average height of the 10 tallest trees (dm)")
     data.summary$heights.10 <- heights.10
   }
   
@@ -297,12 +297,19 @@ sitree.summary <- function(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
         xx <- rbindlist(xx, idcol = 'id.plot')
 
         xx$id  <-  as.factor(xx$id)
-        
-        my.plots[['all_plots_figure']]  <-  ggplot(xx, aes(period, t, group = id, col = id))   +
+        xx[id.plot == 'SBA.m2.ha', id.plot := 'SBA~(m^2/ha)']
+        xx[id.plot == 'stems.ha', id.plot := 'stems/ha']
+        xx[id.plot == 'heights.10', id.plot := 'Average~height~of~the~10~tallest~trees~(dm)']
+        xx[id.plot == 'num.dead.trees.ha', id.plot := 'dead~trees~(stems/ha)']
+
+      
+        my.plots[['all_plots_figure']]  <-
+          
+          ggplot(xx, aes(period, t, group = id, col = id))   +
           geom_line()+
-          facet_wrap(~id.plot, scales = "free") + ylab("")
-        
-     
+          facet_wrap(~id.plot, scales = "free",
+                     labeller = label_parsed) +
+          ylab("")
             
       }## end if by.stand
       
