@@ -1,6 +1,5 @@
 \name{fn.vars.required}
 \alias{fn.vars.required}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Finds Variables Required on Functions
 }
@@ -11,7 +10,6 @@ the functions.
 \usage{
 fn.vars.required(my.functions, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{my.functions}{A list of functions to be used during the simulation} 
   \item{\dots}{Use this to add any funciton that might not be included

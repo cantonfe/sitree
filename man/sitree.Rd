@@ -1,6 +1,5 @@
 \name{sitree}
 \alias{sitree}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Individual Tree Simulator
 }
@@ -13,7 +12,6 @@ include the effect of external modifiers such as climate change.
 sitree(tree.df, stand.df, functions, n.periods = 5, period.length,
 mng.options = NA, print.comments = FALSE,..., ext.mod.first = TRUE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tree.df}{
 A data frame with individual tree data. It should include four columns

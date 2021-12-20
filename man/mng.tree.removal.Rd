@@ -1,6 +1,5 @@
 \name{mng.tree.removal}
 \alias{mng.tree.removal}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Function to remove trees
 }
@@ -11,7 +10,6 @@ management that involves removal (e.g final felling, thinning).
 \usage{
 mng.tree.removal(tr, fl, common.vars, this.period, next.period, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tr}{
 A \emph{trList} class object.
@@ -30,7 +28,6 @@ The period for which to calculate final felling and thinning probability.
 The next period to the one for which final felling and thinning probability are to be calculated.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
 }
 }
 

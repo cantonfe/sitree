@@ -2,7 +2,6 @@
 \alias{harv.prob}
 \alias{management.prob}
 \alias{thin.prob}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Final felling and thinning functions for Norwegian forest
 }
@@ -21,7 +20,6 @@ thin.prob(region, skidding.distance.100m, AgeTo5, vuprha.m3.ha, slope.per, SI.m,
 
 
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
 \item{tr}{
 A \emph{trList} class object.
@@ -45,7 +43,6 @@ The period for which to calculate final felling and thinning probability.
 The next period to the one for which final felling and thinning probability are to be calculated.
 }
 \item{...}{
-%%     ~~Describe \code{region} here~~
 }
 
   \item{region}{

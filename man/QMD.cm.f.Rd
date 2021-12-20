@@ -1,6 +1,5 @@
 \name{QMD.cm.f}
 \alias{QMD.cm.f}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Quadratic Mean Diameter
 }
@@ -10,7 +9,6 @@ Calculates quadratic mean diameter.
 \usage{
 QMD.cm.f(x.mm)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x.mm}{
 DBH in mm.

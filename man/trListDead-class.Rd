@@ -23,11 +23,8 @@ This class is meant to keep the data of the dead trees in a similar way
 as the live trees, but with some extra information such as diameter and height at death.
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
 \code{\link{trList}}, ~~~
-%%  ~~or \code{\linkS4class{CLASSNAME}} for links to other classes ~~~
 }
 \examples{
 showClass("trListDead")

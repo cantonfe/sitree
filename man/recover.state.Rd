@@ -1,6 +1,5 @@
 \name{recover.state}
 \alias{recover.state}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Recovers the State
 }
@@ -11,7 +10,6 @@ function that should not be run, in general, by a regular user.
 \usage{
 recover.state(tr, dead.trees, removed.trees)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tr}{
 A \emph{trList} class object.

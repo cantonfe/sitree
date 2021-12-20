@@ -24,7 +24,6 @@ sitka.vol(dbh, trh, bark, units)
 harw.nor.vol(tsl, dbh, trh, bark, units)
 
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dbh}{
 A vector with diameters at breast height in mm with bark.

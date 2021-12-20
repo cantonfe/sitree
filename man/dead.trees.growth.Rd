@@ -1,6 +1,5 @@
 \name{dead.trees.growth}
 \alias{dead.trees.growth}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Growth of Dead Trees
 }
@@ -13,7 +12,6 @@ to be half of the growth for the whole period, both in terms of DBH and height.
 \usage{
 dead.trees.growth(dt, growth, mort, this.period)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dt}{
 A list of trees with at least two elements: \var{dbh.mm} and \var{height.dm}.

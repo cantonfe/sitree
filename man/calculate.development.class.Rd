@@ -11,7 +11,6 @@ Forest Inventory.
 \usage{
 calculate.development.class(SI.spp, SI.m, stand.age.years)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{SI.spp}{
 Species for which the SI is calculated (1 = spruce, 2 = pine, 3 = deciduous).

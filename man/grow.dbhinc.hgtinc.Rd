@@ -1,6 +1,5 @@
 \name{grow.dbhinc.hgtinc}
 \alias{grow.dbhinc.hgtinc}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Growth and Height Increment Function Wrapper
 }

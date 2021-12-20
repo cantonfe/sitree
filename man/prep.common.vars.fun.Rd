@@ -1,6 +1,5 @@
 \name{prep.common.vars.fun}
 \alias{prep.common.vars.fun}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Function to Calculate Common Variables
 }
@@ -12,7 +11,6 @@ Function to Calculate Common Variables
 prep.common.vars.fun(tr, fl, i.period, this.period, common.vars, vars.required,
 period.length, n.periods, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
    \item{tr}{
 A \emph{trList} class object.
@@ -40,7 +38,6 @@ Length of the periods, in years.
 Number of periods.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
 }
 }
 \details{

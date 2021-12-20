@@ -1,6 +1,5 @@
 \name{toBindLists}
 \alias{toBindLists}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Binding lists
 }
@@ -10,7 +9,6 @@ This function is only used internally to bind vectors, data frames, and lists.
 \usage{
 toBindLists(x, y)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 A vector, data frame or list. 

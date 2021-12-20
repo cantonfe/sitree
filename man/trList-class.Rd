@@ -27,8 +27,6 @@ posterior analysis of the results, any \emph{trList} object I recommend
 to make a copy of the object first, using \code{$copy()}, e.g. my.tr.list$copy().
 }
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
 \seealso{
   \code{\linkS4class{trListDead}}
 }

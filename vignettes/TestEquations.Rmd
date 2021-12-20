@@ -155,7 +155,7 @@ res <- sitree (tree.df   = tr,
 
   
   
-  ```
+```
 
 
 # Taking a look at the results of the simulation

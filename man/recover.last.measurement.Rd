@@ -1,6 +1,5 @@
 \name{recover.last.measurement}
 \alias{recover.last.measurement}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Recover dbh and height at time of death
 }
@@ -12,7 +11,6 @@ height.dm in the \emph{data} field.
 \usage{
 recover.last.measurement(tr.list.dead)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tr.list.dead}{
 a trListDead object

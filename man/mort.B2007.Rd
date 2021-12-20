@@ -1,6 +1,5 @@
 \name{mort.B2007}
 \alias{mort.B2007}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Mortality Function by Bollandsas (2007)
 }
@@ -11,7 +10,6 @@ Implementation of the individual tree mortality function published by Bollandså
 \usage{
 mort.B2007(tr, fl, common.vars, this.period, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tr}{
 A \emph{trList} class object.

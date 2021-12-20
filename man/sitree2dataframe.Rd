@@ -1,7 +1,6 @@
 \name{sitree2dataframe}
 \alias{sitree2dataframe}
 \alias{sitree2dataframe.all}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 sitree2data.frame and sitree2dataframe.all
 }
@@ -13,7 +12,7 @@ sitree2data.frame converts all output of sitree to a data.frame
 sitree2dataframe(tr.dt)
 sitree2dataframe.all(sitree.res)
 }
-%- maybe also 'usage' for other objects documented here.
+
 \arguments{
   \item{tr.dt}{
 A trList or trListDead object.

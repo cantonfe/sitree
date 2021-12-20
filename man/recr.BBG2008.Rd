@@ -2,7 +2,6 @@
 \alias{recr.BBG2008}
 \encoding{UTF-8}
 \alias{BBG2008}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Recruitment function following BBG2008
 }
@@ -19,7 +18,6 @@ recr.BBG2008(tr, fl, common.vars, i.period, this.period, next.period, ...)
 BBG2008 (SBA.m2.ha, SI.m, pr.spru.ba, pr.pine.ba, pr.birch.ba, 
     pr.other.ba) 
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tr}{
 A trList object
@@ -28,7 +26,6 @@ A trList object
 A list describing the plot information
 }
   \item{common.vars}{
-%%     ~~Describe \code{common.vars} here~~
 }
   \item{i.period}{
 The number of period (from 0 to nperiods) for which to calculate recruitment.

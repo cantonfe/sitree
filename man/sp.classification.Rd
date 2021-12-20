@@ -1,6 +1,5 @@
 \name{sp.classification}
 \alias{sp.classification}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Species classifcation
 }
@@ -10,7 +9,6 @@ Classifies the tree species into four species groups
 \usage{
 sp.classification(tree.sp, species.spruce, species.pine, species.harw)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{tree.sp}{
 Tree species code.

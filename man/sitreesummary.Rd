@@ -1,6 +1,5 @@
 \name{sitree.summary}
 \alias{sitree.summary}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Summary plots
 }
@@ -10,9 +9,8 @@ Summary plots
 }
 \usage{
 sitree.summary(sitrees.res, plots, by.stand = TRUE, plot = FALSE,
-                           plot.all.together = FALSE)
+                           plot.all.together = FALSE, with.legend = FALSE)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{sitrees.res}{
 An object result of running sitree().
@@ -33,6 +31,9 @@ TRUE/FALSE if plots are printed
 
   \item{plot.all.together}{
 if TRUE all plots are plotted in a single page
+}
+  \item{with.legend}{
+if TRUE a legend will be added to the plot when by.stand == TRUE
 }
 }
 

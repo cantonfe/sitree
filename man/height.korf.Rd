@@ -1,6 +1,5 @@
 \name{height.korf}
 \alias{height.korf}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Simple height function
 }
@@ -12,7 +11,6 @@ the next period.
 \usage{
 height.korf(common.vars, this.period, tr,  dbh.inc.mm, ...)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{common.vars}{
 A list with at least an element named 'spp' with the species group composition.
